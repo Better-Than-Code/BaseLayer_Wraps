@@ -12,28 +12,29 @@
 <h1>BaseLayer Wraps</h1>
 <p>Bicycle and eScooter wraps and protection, Jacksonville, FL</p>
 </header>
+
 <main class="showroom-stage">
-<aside class="carousel-column left">
-<div class="perspective-carousel">
-<div class="card canvas-1"></div>
-<div class="card canvas-2"></div>
-<div class="card canvas-3"></div>
-<div class="card canvas-4"></div>
-</div>
-<div class="wood-counter"></div>
-</aside>
-<section class="center-stage">
-<button class="primary-cta">Wrap It!</button>
-</section>
-<aside class="carousel-column right">
-<div class="perspective-carousel">
-<div class="card canvas-5"></div>
-<div class="card canvas-6"></div>
-<div class="card canvas-7"></div>
-<div class="card canvas-8"></div>
-</div>
-<div class="wood-counter"></div>
-</aside>
+  <aside class="carousel-column left">
+    <div class="perspective-carousel">
+      <div class="card canvas-1" id="c1Card"><canvas id="c1Canvas" width="240" height="240"></canvas></div>
+      <div class="card canvas-2" id="c2Card"><canvas id="c2Canvas" width="240" height="240"></canvas></div>
+      <div class="card canvas-3" id="c3Card"><canvas id="c3Canvas" width="240" height="240"></canvas></div>
+      <div class="card canvas-4" id="c4Card"><canvas id="c4Canvas" width="240" height="240"></canvas></div>
+    </div>
+    <div class="wood-counter"></div>
+  </aside>
+  <section class="center-stage">
+    <button class="primary-cta">Wrap It!</button>
+  </section>
+  <aside class="carousel-column right">
+    <div class="perspective-carousel">
+      <div class="card canvas-5" id="c5Card"><canvas id="c5Canvas" width="240" height="240"></canvas></div>
+      <div class="card canvas-6" id="c6Card"><canvas id="c6Canvas" width="240" height="240"></canvas></div>
+      <div class="card canvas-7" id="c7Card"><canvas id="c7Canvas" width="240" height="240"></canvas></div>
+      <div class="card canvas-8" id="c8Card"><canvas id="c8Canvas" width="240" height="240"></canvas></div>
+    </div>
+    <div class="wood-counter"></div>
+  </aside>
 </main>
 
 <section class="tier-showcase">
@@ -83,6 +84,7 @@ function sw(to){
   Array.from(document.querySelectorAll('.c')).forEach(e=>e.classList.remove('flip'));
   u();
 }
+
 bB.onclick=()=>sw('bike');sB.onclick=()=>sw('scooter');
 [bD,sD].forEach(deck=>{
   deck.ontouchstart=e=>{X=e.touches[0].clientX;D=0;};
@@ -93,6 +95,113 @@ bB.onclick=()=>sw('bike');sB.onclick=()=>sw('scooter');
   });
 });
 u();
+
 </script>
+
+<script>
+(function(){
+  var card = document.getElementById('c1Card');
+  var cv = document.getElementById('c1Canvas');
+  if(!cv || !card) return;
+  var ctx = cv.getContext('2d');
+  var img = new Image();
+  var swatches = [
+    {hex:'#ba1628', bg:'#0a1128'}, // 3M Satin Vampire Red
+    {hex:'#4a563e', bg:'#221226'}, // Avery Satin Khaki Green
+    {hex:'#d4af37', bg:'#09090b'}  // Avery Satin Solar Gold
+  ];
+  var cur = 0;
+  function h2r(h){
+    var n = parseInt(h.replace('#',''), 16);
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  }
+  function paint(idx){
+    var s = swatches[idx];
+    card.style.background = s.bg;
+    ctx.clearRect(0, 0, 240, 240);
+    ctx.drawImage(img, 0, 0, 240, 240);
+    try {
+      var imgData = ctx.getImageData(0, 0, 240, 240);
+      var d = imgData.data;
+      var rgb = h2r(s.hex);
+      var tR = rgb[0], tG = rgb[1], tB = rgb[2];
+      for(var i = 0; i < d.length; i += 4){
+        var r = d[i], g = d[i+1], b = d[i+2], a = d[i+3];
+        if(a > 30 && b > 100 && (b / (r || 1)) > 1.2 && (b / (g || 1)) > 1.1){
+          var lum = (r / 3.333 + g / 1.695 + b / 9.091) / 255;
+          var f = lum / (1 / 1.3);
+          d[i] = Math.min(255, Math.round(tR / (1 / f)));
+          d[i+1] = Math.min(255, Math.round(tG / (1 / f)));
+          d[i+2] = Math.min(255, Math.round(tB / (1 / f)));
+        }
+      }
+      ctx.putImageData(imgData, 0, 0);
+    } catch(e){ console.warn(e); }
+  }
+  img.onload = function(){ paint(0); };
+  img.onerror = function(){
+    if(img.src.indexOf('assets/') !== -1) img.src = 'bike-03.png';
+  };
+  img.src = 'assets/bike-03.png';
+  card.onclick = function(){
+    cur = (cur + 1) % swatches.length;
+    paint(cur);
+  };
+})();
+</script>
+
+<script>
+(function(){
+  var F=[
+    {id:'c1',m:'assets/bike-03.png',s:[['#ba1628','#0a1128'],['#4a563e','#221226'],['#d4af37','#09090b']]},
+    {id:'c2',m:'assets/bike-02.png',s:[['#1e5b84','#180c05'],['#b85c37','#071722'],['#787e85','#111827']]},
+    {id:'c3',m:'assets/bike-01.png',s:[['#d4af37','#0a0a0c'],['#26a99a','#200810'],['#912224','#06151e']]},
+    {id:'c4',m:'assets/bike-03.png',s:[['#007799','#1a1306'],['#588f27','#1e0d26'],['#424549','#0f172a']]},
+    {id:'c5',m:'assets/scooter-03.png',s:[['#26a99a','#1e0d16'],['#e2ba1b','#0c101c'],['#ba1628','#061a18']]},
+    {id:'c6',m:'assets/scooter-02.png',s:[['#4a563e','#1f0e22'],['#b85c37','#071820'],['#007799','#201408']]},
+    {id:'c7',m:'assets/scooter-01.png',s:[['#4c2c69','#0b1510'],['#d4af37','#110a18'],['#1e5b84','#1a0d05']]},
+    {id:'c8',m:'assets/scooter-03.png',s:[['#912224','#081816'],['#787e85','#1c100a'],['#588f27','#1d0e20']]}
+  ];
+  function h2r(h){
+    var n=parseInt(h.replace('#',''),16);
+    return [(n>>16)&255,(n>>8)&255,n&255];
+  }
+  F.forEach(function(f){
+    var cd=document.getElementById(f.id+'Card'),cv=document.getElementById(f.id+'Canvas');
+    if(!cd||!cv)return;
+    var cx=cv.getContext('2d'),im=new Image(),cur=0;
+    function p(i){
+      var sw=f.s[i];
+      cd.style.background=sw[1];
+      cx.clearRect(0,0,240,240);
+      cx.drawImage(im,0,0,240,240);
+      try{
+        var dt=cx.getImageData(0,0,240,240),d=dt.data,rgb=h2r(sw[0]),tR=rgb[0],tG=rgb[1],tB=rgb[2];
+        for(var j=0;j<d.length;j+=4){
+          var r=d[j],g=d[j+1],b=d[j+2],a=d[j+3];
+          if(a>30&&b>100&&(b/(r||1))>1.2&&(b/(g||1))>1.1){
+            var lum=(r/3.333+g/1.695+b/9.091)/255;
+            var sc=lum/(1/1.3);
+            d[j]=Math.min(255,Math.round(tR/(1/sc)));
+            d[j+1]=Math.min(255,Math.round(tG/(1/sc)));
+            d[j+2]=Math.min(255,Math.round(tB/(1/sc)));
+          }
+        }
+        cx.putImageData(dt,0,0);
+      }catch(e){console.warn(e);}
+    }
+    im.onload=function(){p(0);};
+    im.onerror=function(){
+      if(im.src.indexOf('assets/')!==-1)im.src=f.m.replace('assets/','');
+    };
+    im.src=f.m;
+    cd.onclick=function(){
+      cur=(cur+1)%f.s.length;
+      p(cur);
+    };
+  });
+})();
+</script>
+
 </body>
 </html>

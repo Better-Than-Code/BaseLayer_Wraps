@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BaseLayer Wraps</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<header class="studio-header">
+<h1>BaseLayer Wraps</h1>
+<p>Bicycle and eScooter wraps and protection, Jacksonville, FL</p>
+</header>
+<main class="showroom-stage">
+<aside class="carousel-column left">
+<div class="perspective-carousel">
+<div class="card canvas-1"></div>
+<div class="card canvas-2"></div>
+<div class="card canvas-3"></div>
+<div class="card canvas-4"></div>
+</div>
+<div class="wood-counter"></div>
+</aside>
+<section class="center-stage">
+<button class="primary-cta">Wrap It!</button>
+</section>
+<aside class="carousel-column right">
+<div class="perspective-carousel">
+<div class="card canvas-5"></div>
+<div class="card canvas-6"></div>
+<div class="card canvas-7"></div>
+<div class="card canvas-8"></div>
+</div>
+<div class="wood-counter"></div>
+</aside>
+</main>
+
+<section class="tier-showcase">
+  <div class="sw-wrap"><div class="sw"><button class="on" id="bBtn">Bicycles</button><button id="sBtn">eScooters</button></div></div>
+  <div class="w">
+    <div class="deck" id="deckBike">
+      <div class="c p0"><div class="k"><div class="f"><h3>Accent Layer</h3><img src="assets/bike-01.png"><span>$49</span></div><div class="b"><h4>Accent Layer</h4><p>Forks or battery</p><p>Cast vinyl</p><p>1-Day</p></div></div></div>
+      <div class="c p1"><div class="k"><div class="f"><h3>Base Layer</h3><img src="assets/bike-02.png"><span>$119</span></div><div class="b"><h4>Base Layer</h4><p>Main triangle</p><p>Cast vinyl</p><p>1-Day</p></div></div></div>
+      <div class="c p2"><div class="k"><div class="f"><h3>Over Layer</h3><img src="assets/bike-03.png"><span>$389+</span></div><div class="b"><h4>Over Layer</h4><p>Full frame+stripes</p><p>Cast+Reflective</p><p>1-Day</p></div></div></div>
+      <div class="c p3"><div class="k"><div class="f"><h3>Protection</h3><img src="assets/bike-03.png"><span>$159+</span></div><div class="b"><h4>Protection</h4><p>Full wear PPF</p><p>8mil Clear PPF</p><p>1-Day</p></div></div></div>
+    </div>
+    <div class="deck" id="deckScooter" style="display:none">
+      <div class="c p0"><div class="k"><div class="f"><h3>Accent Layer</h3><img src="assets/scooter-01.png"><span>$49</span></div><div class="b"><h4>Accent Layer</h4><p>Steering stem</p><p>Cast vinyl</p><p>1-Day</p></div></div></div>
+      <div class="c p1"><div class="k"><div class="f"><h3>Base Layer</h3><img src="assets/scooter-02.png"><span>$89</span></div><div class="b"><h4>Base Layer</h4><p>Stem, neck & deck</p><p>Cast vinyl</p><p>1-Day</p></div></div></div>
+      <div class="c p2"><div class="k"><div class="f"><h3>Over Layer</h3><img src="assets/scooter-03.png"><span>$189</span></div><div class="b"><h4>Over Layer</h4><p>Full + fork & fenders</p><p>Cast+Reflective</p><p>1-Day</p></div></div></div>
+      <div class="c p3"><div class="k"><div class="f"><h3>Protection</h3><img src="assets/scooter-03.png"><span>$79</span></div><div class="b"><h4>Protection</h4><p>High-wear PPF</p><p>8mil Clear PPF</p><p>1-Day</p></div></div></div>
+    </div>
+  </div>
+  <div class="dots"><i class="dot on"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i></div>
+</section>
+
+<section class="motto-section">
+<p class="motto-text">Precision protection. Signature style.</p>
+</section>
+<footer class="studio-footer">
+<p>Wrapped with ❤️ in Jacksonville, FL</p>
+<div class="footer-links"><a href="#privacy" class="modal-link">Privacy</a> · <a href="#license" class="modal-link">License</a> · <a href="#contact" class="modal-link">Contact</a></div>
+</footer>
+<script>
+const P=['p0','p1','p2','p3'];let C=0,X=0,D=0,act='bike';
+const bD=document.getElementById('deckBike'),sD=document.getElementById('deckScooter');
+const bB=document.getElementById('bBtn'),sB=document.getElementById('sBtn');
+const dts=Array.from(document.querySelectorAll('.dot'));
+const curD=()=>act==='bike'?bD:sD;
+function u(){
+  const cs=Array.from(curD().querySelectorAll('.c'));
+  cs.forEach((e,i)=>{
+    e.className='c '+P[(i-C+4)%4];
+    if((i-C+4)%4!==0)e.classList.remove('flip');
+  });
+  dts.forEach((dot,i)=>dot.classList.toggle('on',i===C));
+}
+function sw(to){
+  act=to;C=0;
+  if(to==='bike'){bD.style.display='';sD.style.display='none';bB.className='on';sB.className='';}
+  else{bD.style.display='none';sD.style.display='';bB.className='';sB.className='on';}
+  Array.from(document.querySelectorAll('.c')).forEach(e=>e.classList.remove('flip'));
+  u();
+}
+bB.onclick=()=>sw('bike');sB.onclick=()=>sw('scooter');
+[bD,sD].forEach(deck=>{
+  deck.ontouchstart=e=>{X=e.touches[0].clientX;D=0;};
+  deck.ontouchmove=e=>{D=e.touches[0].clientX-X;};
+  deck.ontouchend=()=>{if(Math.abs(D)>30){C=(C+(D<0?1:3))%4;u();}};
+  deck.querySelectorAll('.c').forEach((card,i)=>{
+    card.onclick=()=>{if(card.classList.contains('p0')){card.classList.toggle('flip');}else{C=i;u();}};
+  });
+});
+u();
+</script>
+</body>
+</html>

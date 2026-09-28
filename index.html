@@ -9,7 +9,10 @@
 
 <body>
 <header class="studio-header">
-<h1>BaseLayer Wraps</h1>
+    <div class="brand">
+      <span class="base">Base</span><span class="layer">Layer</span>
+      <div class="wraps">WRAPS</div>
+  </div>
 <p>Bicycle and eScooter wraps and protection, Jacksonville, FL</p>
 </header>
 
@@ -42,14 +45,14 @@
   <div class="w">
     <div class="deck" id="deckBike">
       <div class="c p0"><div class="k"><div class="f"><h3>Accent Layer</h3><img src="assets/bike-01.png"><span>$49</span></div><div class="b"><h4>Accent Layer</h4><p>Forks or battery</p><p>Cast vinyl</p><p>1-Day</p></div></div></div>
-      <div class="c p1"><div class="k"><div class="f"><h3>Base Layer</h3><img src="assets/bike-02.png"><span>$119</span></div><div class="b"><h4>Base Layer</h4><p>Main triangle</p><p>Cast vinyl</p><p>1-Day</p></div></div></div>
-      <div class="c p2"><div class="k"><div class="f"><h3>Over Layer</h3><img src="assets/bike-03.png"><span>$389+</span></div><div class="b"><h4>Over Layer</h4><p>Full frame+stripes</p><p>Cast+Reflective</p><p>1-Day</p></div></div></div>
-      <div class="c p3"><div class="k"><div class="f"><h3>Protection</h3><img src="assets/bike-03.png"><span>$159+</span></div><div class="b"><h4>Protection</h4><p>Full wear PPF</p><p>8mil Clear PPF</p><p>1-Day</p></div></div></div>
+      <div class="c p1"><div class="k"><div class="f"><h3>Base Layer</h3><img src="assets/bike-02.png"><span>$149</span></div><div class="b"><h4>Base Layer</h4><p>Main triangle</p><p>Cast vinyl</p><p>1-Day</p></div></div></div>
+      <div class="c p2"><div class="k"><div class="f"><h3>Over Layer</h3><img src="assets/bike-03.png"><span>$349</span></div><div class="b"><h4>Over Layer</h4><p>Full frame+stripes</p><p>Cast+Reflective</p><p>1-Day</p></div></div></div>
+      <div class="c p3"><div class="k"><div class="f"><h3>Protection</h3><img src="assets/bike-03.png"><span>$149</span></div><div class="b"><h4>Protection</h4><p>Full wear PPF</p><p>8mil Clear PPF</p><p>1-Day</p></div></div></div>
     </div>
     <div class="deck" id="deckScooter" style="display:none">
       <div class="c p0"><div class="k"><div class="f"><h3>Accent Layer</h3><img src="assets/scooter-01.png"><span>$49</span></div><div class="b"><h4>Accent Layer</h4><p>Steering stem</p><p>Cast vinyl</p><p>1-Day</p></div></div></div>
-      <div class="c p1"><div class="k"><div class="f"><h3>Base Layer</h3><img src="assets/scooter-02.png"><span>$89</span></div><div class="b"><h4>Base Layer</h4><p>Stem, neck & deck</p><p>Cast vinyl</p><p>1-Day</p></div></div></div>
-      <div class="c p2"><div class="k"><div class="f"><h3>Over Layer</h3><img src="assets/scooter-03.png"><span>$189</span></div><div class="b"><h4>Over Layer</h4><p>Full + fork & fenders</p><p>Cast+Reflective</p><p>1-Day</p></div></div></div>
+      <div class="c p1"><div class="k"><div class="f"><h3>Base Layer</h3><img src="assets/scooter-02.png"><span>$99</span></div><div class="b"><h4>Base Layer</h4><p>Stem, neck & deck</p><p>Cast vinyl</p><p>1-Day</p></div></div></div>
+      <div class="c p2"><div class="k"><div class="f"><h3>Over Layer</h3><img src="assets/scooter-03.png"><span>$199</span></div><div class="b"><h4>Over Layer</h4><p>Full + fork & fenders</p><p>Cast+Reflective</p><p>1-Day</p></div></div></div>
       <div class="c p3"><div class="k"><div class="f"><h3>Protection</h3><img src="assets/scooter-03.png"><span>$79</span></div><div class="b"><h4>Protection</h4><p>High-wear PPF</p><p>8mil Clear PPF</p><p>1-Day</p></div></div></div>
     </div>
   </div>
@@ -150,55 +153,50 @@ u();
 })();
 </script>
 
+
 <script>
 (function(){
   var F=[
-    {id:'c1',m:'assets/bike-03.png',s:[['#ba1628','#0a1128'],['#4a563e','#221226'],['#d4af37','#09090b']]},
-    {id:'c2',m:'assets/bike-02.png',s:[['#1e5b84','#180c05'],['#b85c37','#071722'],['#787e85','#111827']]},
-    {id:'c3',m:'assets/bike-01.png',s:[['#d4af37','#0a0a0c'],['#26a99a','#200810'],['#912224','#06151e']]},
-    {id:'c4',m:'assets/bike-03.png',s:[['#007799','#1a1306'],['#588f27','#1e0d26'],['#424549','#0f172a']]},
-    {id:'c5',m:'assets/scooter-03.png',s:[['#26a99a','#1e0d16'],['#e2ba1b','#0c101c'],['#ba1628','#061a18']]},
-    {id:'c6',m:'assets/scooter-02.png',s:[['#4a563e','#1f0e22'],['#b85c37','#071820'],['#007799','#201408']]},
-    {id:'c7',m:'assets/scooter-01.png',s:[['#4c2c69','#0b1510'],['#d4af37','#110a18'],['#1e5b84','#1a0d05']]},
-    {id:'c8',m:'assets/scooter-03.png',s:[['#912224','#081816'],['#787e85','#1c100a'],['#588f27','#1d0e20']]}
+    {id:'c1',m:'assets/bike-03.png',s:[['#ba1628','#3a7d18','#173807'],['#1e5b84','#c45500','#542000'],['#d4af37','#1e4db8','#0b1f52']]},
+    {id:'c2',m:'assets/bike-02.png',s:[['#26a99a','#b8145d','#520527'],['#4a563e','#c79e00','#574400'],['#b85c37','#008fa3','#003c45']]},
+    {id:'c3',m:'assets/bike-01.png',s:[['#3d4144','#c4ab00','#4d4300'],['#007799','#bd244b','#4f0d1e'],['#912224','#0099a8','#003d42']]},
+    {id:'c4',m:'assets/bike-03.png',s:[['#588f27','#9612ad','#3f044a'],['#787e85','#b8411a','#4a1705'],['#e2ba1b','#5b35c2','#231057']]},
+    {id:'c5',m:'assets/scooter-03.png',s:[['#ba1628','#008fa3','#003840'],['#26a99a','#c45500','#542000'],['#d4af37','#5632bd','#221054']]},
+    {id:'c6',m:'assets/scooter-02.png',s:[['#1e5b84','#c49e00','#524000'],['#588f27','#b5145b','#4d0525'],['#b85c37','#3a7d18','#173807']]},
+    {id:'c7',m:'assets/scooter-01.png',s:[['#007799','#c45500','#522100'],['#e2ba1b','#1644ad','#071d54'],['#3d4144','#b8284e','#4a0d1d']]},
+    {id:'c8',m:'assets/scooter-03.png',s:[['#912224','#3a7d18','#173807'],['#4c2c69','#c4aa18','#4f4405'],['#4a563e','#008fa3','#003c45']]}
   ];
-  function h2r(h){
-    var n=parseInt(h.replace('#',''),16);
-    return [(n>>16)&255,(n>>8)&255,n&255];
-  }
+  function h2r(h){var n=parseInt(h.replace('#',''),16);return[(n>>16)&255,(n>>8)&255,n&255];}
   F.forEach(function(f){
     var cd=document.getElementById(f.id+'Card'),cv=document.getElementById(f.id+'Canvas');
     if(!cd||!cv)return;
     var cx=cv.getContext('2d'),im=new Image(),cur=0;
     function p(i){
       var sw=f.s[i];
-      cd.style.background=sw[1];
-      cx.clearRect(0,0,240,240);
-      cx.drawImage(im,0,0,240,240);
+      cd.style.background='radial-gradient(circle at center, '+sw[1]+' 0%, '+sw[2]+' 100%)';
+      cx.clearRect(0,0,240,240);cx.drawImage(im,0,0,240,240);
       try{
         var dt=cx.getImageData(0,0,240,240),d=dt.data,rgb=h2r(sw[0]),tR=rgb[0],tG=rgb[1],tB=rgb[2];
         for(var j=0;j<d.length;j+=4){
           var r=d[j],g=d[j+1],b=d[j+2],a=d[j+3];
           if(a>30&&b>100&&(b/(r||1))>1.2&&(b/(g||1))>1.1){
-            var lum=(r/3.333+g/1.695+b/9.091)/255;
-            var sc=lum/(1/1.3);
+            var lum=(r/3.333+g/1.695+b/9.091)/255,sc=(lum+0.22)/(1/1.45);
             d[j]=Math.min(255,Math.round(tR/(1/sc)));
             d[j+1]=Math.min(255,Math.round(tG/(1/sc)));
             d[j+2]=Math.min(255,Math.round(tB/(1/sc)));
+          }else if(a>20){
+            d[j]=Math.min(255,Math.round(r/0.82+12));
+            d[j+1]=Math.min(255,Math.round(g/0.82+12));
+            d[j+2]=Math.min(255,Math.round(b/0.82+12));
           }
         }
         cx.putImageData(dt,0,0);
       }catch(e){console.warn(e);}
     }
     im.onload=function(){p(0);};
-    im.onerror=function(){
-      if(im.src.indexOf('assets/')!==-1)im.src=f.m.replace('assets/','');
-    };
+    im.onerror=function(){if(im.src.indexOf('assets/')!==-1)im.src=f.m.replace('assets/','');};
     im.src=f.m;
-    cd.onclick=function(){
-      cur=(cur+1)%f.s.length;
-      p(cur);
-    };
+    cd.onclick=function(){cur=(cur+1)%f.s.length;p(cur);};
   });
 })();
 </script>

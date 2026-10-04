@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>BaseLayer Wraps | Customer Portal</title>
 <link rel="stylesheet" href="style.css">
+<!-- Leaflet Engine for Real Street / Satellite Geodata -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <style>
   body {
     background: #f1f5f9;
@@ -18,7 +21,7 @@
   }
   .portal-card {
     background: #ffffff;
-    max-width: 620px;
+    max-width: 640px;
     width: 100%;
     border-radius: 18px;
     padding: 2rem;
@@ -265,7 +268,7 @@
     line-height: 1.45;
   }
 
-  /* Vector Tactical Map Styles */
+  /* Live Map Container & Inset Picture-in-Picture */
   .wayfinding-container {
     background: #0f172a;
     border-radius: 14px;
@@ -274,20 +277,63 @@
     color: #f8fafc;
     border: 1px solid #1e293b;
   }
-  .map-wrapper {
+  .map-outer-frame {
     position: relative;
     width: 100%;
-    border-radius: 10px;
+    height: 360px;
+    border-radius: 12px;
     overflow: hidden;
-    border: 1px solid #334155;
-    background: #1e293b;
     margin: 12px 0;
+    border: 1.5px solid #334155;
+    background: #0f172a;
   }
-  .map-svg {
+  #realTimeMap {
     width: 100%;
-    height: auto;
+    height: 100%;
+    z-index: 1;
+  }
+  
+  /* Picture-in-Picture Outcropping Viewfinder */
+  .outcropping-inset {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    width: 130px;
+    height: 95px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid #38bdf8;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+    z-index: 1000;
+    background: #0f172a;
+    cursor: pointer;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+  }
+  .outcropping-inset:hover {
+    transform: scale(1.05);
+    border-color: #ffffff;
+  }
+  .outcropping-inset img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     display: block;
   }
+  .outcropping-inset .pip-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(15, 23, 42, 0.85);
+    color: #38bdf8;
+    font-size: 0.6rem;
+    font-weight: 800;
+    text-align: center;
+    padding: 2px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
   .route-legend-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -304,10 +350,10 @@
     font-size: 0.72rem;
     border-left: 3px solid transparent;
   }
-  .route-badge.c1 { border-left-color: #38bdf8; }
-  .route-badge.c2 { border-left-color: #34d399; }
-  .route-badge.c3 { border-left-color: #fbbf24; }
-  .route-badge.c4 { border-left-color: #c084fc; }
+  .route-badge.c1 { border-left-color: #06b6d4; }
+  .route-badge.c2 { border-left-color: #10b981; }
+  .route-badge.c3 { border-left-color: #f59e0b; }
+  .route-badge.c4 { border-left-color: #a855f7; }
   .route-badge strong {
     display: block;
     color: #f8fafc;
@@ -510,93 +556,59 @@
       </div>
     </div>
 
-    <!-- VECTOR TACTICAL WAYFINDING SYSTEM -->
+    <!-- REAL TACTICAL GEOGRAPHIC MAP WITH REAL-WORLD OVERLAYS -->
     <div class="wayfinding-container">
       <div style="display:flex; justify-content:space-between; align-items:center;">
         <div>
           <h4 style="font-size:0.9rem; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; color:#f8fafc; margin:0;">
-            Pickup Hub: Riverwalk Overlook
+            Pickup Hub: Northbank Overlook Bench
           </h4>
-          <span style="font-size:0.75rem; color:#94a3b8;">CSX & Northbank Music Garden Area</span>
+          <span style="font-size:0.75rem; color:#94a3b8;">CSX & Northbank Music Garden Turf Lawn</span>
         </div>
-        <span style="font-size:0.65rem; background:#334155; padding:3px 8px; border-radius:4px; font-weight:700; color:#38bdf8;">LIVE GPS OVERLAY</span>
+        <span style="font-size:0.65rem; background:#334155; padding:3px 8px; border-radius:4px; font-weight:700; color:#38bdf8;">GPS TARGET: 30.3236, -81.6635</span>
       </div>
 
-      <!-- Sovereign Inline SVG Vector Map -->
-      <div class="map-wrapper">
-        <svg class="map-svg" viewBox="0 0 540 280" xmlns="http://www.w3.org/2000/svg">
-          <rect width="540" height="280" fill="#0f172a"/>
-          
-          <path d="M 0,180 Q 150,160 300,185 T 540,210 L 540,280 L 0,280 Z" fill="#0284c7" opacity="0.35"/>
-          <path d="M 0,180 Q 150,160 300,185 T 540,210" fill="none" stroke="#38bdf8" stroke-width="2" opacity="0.6"/>
-          <text x="360" y="245" fill="#38bdf8" font-size="11" font-weight="700" letter-spacing="2" opacity="0.5">ST. JOHNS RIVER</text>
-
-          <path d="M 0,172 Q 150,152 300,177 T 540,202" fill="none" stroke="#cbd5e1" stroke-dasharray="4,4" stroke-width="3"/>
-          <text x="20" y="162" fill="#94a3b8" font-size="9" font-weight="600">NORTHBANK RIVERWALK</text>
-
-          <path d="M 0,110 L 220,110 L 320,80 L 540,80" fill="none" stroke="#334155" stroke-width="8"/>
-          <text x="30" y="103" fill="#64748b" font-size="9" font-weight="700">RIVERSIDE AVE</text>
-
-          <path d="M 180,30 L 540,30" fill="none" stroke="#334155" stroke-width="6"/>
-          <text x="360" y="24" fill="#64748b" font-size="8" font-weight="700">WATER ST / W BAY ST</text>
-
-          <path d="M 40,280 L 40,110" fill="none" stroke="#475569" stroke-width="6"/>
-          <text x="48" y="260" fill="#94a3b8" font-size="8" font-weight="600" transform="rotate(-90 48,260)">FULLER WARREN SUP</text>
-
-          <path d="M 330,280 L 330,80" fill="none" stroke="#475569" stroke-width="6"/>
-          <text x="338" y="260" fill="#94a3b8" font-size="8" font-weight="600" transform="rotate(-90 338,260)">ACOSTA BRIDGE</text>
-
-          <rect x="220" y="55" width="70" height="40" rx="4" fill="#1e293b" stroke="#475569" stroke-width="1.5"/>
-          <text x="235" y="78" fill="#e2e8f0" font-size="9" font-weight="800">CSX HQ</text>
-
-          <rect x="210" y="125" width="85" height="35" rx="6" fill="#065f46" opacity="0.6" stroke="#10b981" stroke-dasharray="2,2"/>
-          <text x="216" y="146" fill="#6ee7b7" font-size="8" font-weight="700">MUSIC GARDEN</text>
-
-          <path d="M 120,110 L 210,110 L 250,145" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="4,2"/>
-          <path d="M 40,180 Q 120,170 240,170" fill="none" stroke="#34d399" stroke-width="2.5" stroke-dasharray="4,2"/>
-          <path d="M 330,140 L 270,165" fill="none" stroke="#fbbf24" stroke-width="2.5" stroke-dasharray="4,2"/>
-          <path d="M 270,30 L 270,125" fill="none" stroke="#c084fc" stroke-width="2.5" stroke-dasharray="4,2"/>
-
-          <circle cx="260" cy="168" r="14" fill="#ef4444" opacity="0.25"/>
-          <circle cx="260" cy="168" r="8" fill="#ef4444" opacity="0.5"/>
-          <circle cx="260" cy="168" r="4" fill="#ef4444"/>
-          
-          <line x1="260" y1="168" x2="260" y2="135" stroke="#f8fafc" stroke-width="2"/>
-          <rect x="245" y="115" width="105" height="20" rx="4" fill="#ef4444"/>
-          <text x="250" y="129" fill="#ffffff" font-size="8" font-weight="900" letter-spacing="0.5">BENCH OVERLOOK</text>
-        </svg>
+      <!-- Real Map Viewport with Inset PiP -->
+      <div class="map-outer-frame">
+        <div id="realTimeMap"></div>
+        
+        <!-- Outcropping Viewfinder Inset (Bottom Corner) -->
+        <div class="outcropping-inset" onclick="openOutcroppingModal()" title="View Overlook Outcropping">
+          <img src="assets/riverwalk-overlook.jpg" onerror="this.src='https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=400&q=80'" alt="Riverwalk Overlook Outcropping">
+          <div class="pip-label">View Overlook</div>
+        </div>
       </div>
 
       <div class="route-legend-grid">
         <div class="route-badge c1">
           <div>
-            <strong>1. Riverside Ave</strong>
-            <span>Pedestrian path past Florida Blue & YMCA directly into the turf lawn.</span>
+            <strong>1. Riverside Ave (Cyan)</strong>
+            <span>Pedestrian path past Florida Blue & YMCA straight onto riverfront lawn.</span>
           </div>
         </div>
         <div class="route-badge c2">
           <div>
-            <strong>2. Fuller Warren SUP</strong>
-            <span>Direct bike/scooter shared-use path connector from San Marco/Riverside.</span>
+            <strong>2. Fuller Warren SUP (Emerald)</strong>
+            <span>Direct bike/scooter shared-use path from San Marco / Riverside.</span>
           </div>
         </div>
         <div class="route-badge c3">
           <div>
-            <strong>3. Acosta Bridge</strong>
-            <span>Northbank staircase/ramp descending straight onto the riverfront path.</span>
+            <strong>3. Acosta Bridge (Amber)</strong>
+            <span>Northbank staircase & ADA ramp descending directly to river path.</span>
           </div>
         </div>
         <div class="route-badge c4">
           <div>
-            <strong>4. West Bay / Water St</strong>
-            <span>Curbside vehicle drop-off zone behind CSX building for fast haul-ins.</span>
+            <strong>4. West Bay / Water St (Violet)</strong>
+            <span>Curbside vehicle turnaround zone behind CSX building for transport haul-ins.</span>
           </div>
         </div>
       </div>
 
       <a href="https://www.google.com/maps/dir/?api=1&destination=30.3236,-81.6635" target="_blank" class="gps-nav-btn">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
-        Launch GPS Navigation to Overlook Pin
+        Launch Turn-by-Turn Navigation to Overlook Pin
       </a>
     </div>
   </div>
@@ -615,12 +627,12 @@
 // ============================================================================
 // MASTER OPERATIONAL PIPELINE CONFIGURATION
 // ============================================================================
-// CRITICAL: Insert your active deployed Google Apps Script /exec URL below
 const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbw6H3i66Y7nZ29qHl1_Gq9g2lBvW6xO0m8kL3zY/exec';
 
 let jobRecord = null;
 let sigCanvas, sigCtx, isSigning = false, hasSignature = false;
 let selectedSlotTime = '';
+let leafletMapInstance = null;
 
 // 1. Ingest URL Parameters on Page Load
 window.addEventListener('load', async () => {
@@ -638,12 +650,10 @@ window.addEventListener('load', async () => {
   initSignatureEngine();
 });
 
-// Default Date Input Constraints (Today -> +14 Days)
 function initDateConstraints() {
   const dateInput = document.getElementById('dropoffDate');
   const now = new Date();
   
-  // Tomorrow as minimum default
   const tomorrow = new Date(now);
   tomorrow.setDate(tomorrow.getDate() + 1);
   const minDate = tomorrow.toISOString().split('T')[0];
@@ -659,7 +669,6 @@ function initDateConstraints() {
   dateInput.addEventListener('change', validateExecutionRequirements);
 }
 
-// Slot Selection Handler
 function selectSlot(btn, timeString) {
   document.querySelectorAll('.time-slot-btn').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
@@ -714,7 +723,6 @@ function routeStageView(data) {
   }
 }
 
-// Render Stage 1: Waiver, Scheduling & Deposit
 function renderWaiverView(data) {
   document.getElementById('stageWaiverDeposit').style.display = 'block';
   document.getElementById('jobBadge').textContent = `JOB ID: ${data.jobId}`;
@@ -727,7 +735,6 @@ function renderWaiverView(data) {
   document.getElementById('btnDepositAmount').textContent = `$${Number(data.depositPaid || 0).toFixed(2)}`;
 }
 
-// Render Stage 2: Post-Wrap Pickup & Balance Settle
 function renderPickupView(data) {
   document.getElementById('stagePickupSettle').style.display = 'block';
   document.getElementById('pickupBadge').textContent = `READY FOR PICKUP: ${data.jobId}`;
@@ -743,6 +750,83 @@ function renderPickupView(data) {
   thumb2.src = data.customerPhoto2 || 'assets/bike-03.png';
 
   initCureCountdown();
+  initRealTacticalMap();
+}
+
+// 4. Mount Real Street Geodata Map with Ingress Polylines
+function initRealTacticalMap() {
+  if (leafletMapInstance) return;
+
+  const targetCoords = [30.3236, -81.6635]; // Northbank Overlook Bench / CSX Lawn
+
+  setTimeout(() => {
+    leafletMapInstance = L.map('realTimeMap', {
+      center: targetCoords,
+      zoom: 16,
+      zoomControl: true,
+      attributionControl: false
+    });
+
+    // Dark Matter Tactical Basemap (Clean High-Contrast Carto)
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+      maxZoom: 19
+    }).addTo(leafletMapInstance);
+
+    // Primary Rendezvous Target Pin (Pulsing Red Marker)
+    const pinIcon = L.divIcon({
+      className: 'custom-pin',
+      html: `<div style="background:#ef4444; width:16px; height:16px; border-radius:50%; border:3px solid #ffffff; box-shadow:0 0 15px #ef4444;"></div>`,
+      iconSize: [22, 22],
+      iconAnchor: [11, 11]
+    });
+
+    L.marker(targetCoords, { icon: pinIcon })
+      .addTo(leafletMapInstance)
+      .bindPopup("<b>Rendezvous Hub:</b> Northbank Riverwalk Overlook Bench")
+      .openPopup();
+
+    // Corridor 1 (Cyan): Riverside Ave / YMCA Pedestrian Ingress
+    L.polyline([
+      [30.3205, -81.6685],
+      [30.3220, -81.6660],
+      [30.3236, -81.6635]
+    ], { color: '#06b6d4', weight: 4, opacity: 0.9, dashArray: '6, 6' })
+    .addTo(leafletMapInstance)
+    .bindTooltip("1. Riverside Ave Ingress");
+
+    // Corridor 2 (Emerald): Fuller Warren Shared-Use Path (SUP)
+    L.polyline([
+      [30.3160, -81.6680],
+      [30.3195, -81.6665],
+      [30.3236, -81.6635]
+    ], { color: '#10b981', weight: 4, opacity: 0.9, dashArray: '6, 6' })
+    .addTo(leafletMapInstance)
+    .bindTooltip("2. Fuller Warren SUP Path");
+
+    // Corridor 3 (Amber): Acosta Bridge Stairwell & River Ramp
+    L.polyline([
+      [30.3210, -81.6605],
+      [30.3228, -81.6620],
+      [30.3236, -81.6635]
+    ], { color: '#f59e0b', weight: 4, opacity: 0.9, dashArray: '6, 6' })
+    .addTo(leafletMapInstance)
+    .bindTooltip("3. Acosta Bridge Descent");
+
+    // Corridor 4 (Violet): West Bay / Water St Vehicle Turnaround
+    L.polyline([
+      [30.3255, -81.6635],
+      [30.3242, -81.6635],
+      [30.3236, -81.6635]
+    ], { color: '#a855f7', weight: 4, opacity: 0.9, dashArray: '6, 6' })
+    .addTo(leafletMapInstance)
+    .bindTooltip("4. West Bay / Water St Turnaround");
+
+    leafletMapInstance.invalidateSize();
+  }, 200);
+}
+
+function openOutcroppingModal() {
+  alert("Northbank Riverwalk Overlook: Meet the technician at the river overlook bench located directly on the turf lawn between CSX HQ and the Riverwalk promenade.");
 }
 
 function initCureCountdown() {
@@ -779,7 +863,7 @@ function showCompletedView() {
     `Wrap completed, balance settled, and hardware returned to customer. Thank you for choosing BaseLayer Wraps Studio!`;
 }
 
-// 4. Touch Signature Mechanics
+// 5. Touch Signature Mechanics
 function initSignatureEngine() {
   sigCanvas = document.getElementById('sigCanvas');
   if (!sigCanvas) return;
@@ -837,7 +921,6 @@ function clearSignature() {
   validateExecutionRequirements();
 }
 
-// Enforce Slot Selection + Signature Before Unlocking Deposit
 function validateExecutionRequirements() {
   const dateVal = document.getElementById('dropoffDate').value;
   const executeBtn = document.getElementById('executeBtn');
@@ -854,7 +937,7 @@ function validateExecutionRequirements() {
   }
 }
 
-// 5. Stage 1 Submission: Waiver, Scheduled Slot & 50% Deposit
+// 6. Stage 1 Submission: Waiver, Scheduled Slot & 50% Deposit
 async function executeWaiverAndPay() {
   const dateVal = document.getElementById('dropoffDate').value;
   if (!hasSignature || !selectedSlotTime || !dateVal) {
@@ -898,7 +981,7 @@ async function executeWaiverAndPay() {
   }
 }
 
-// 6. Stage 2 Submission: Final Balance Settlement
+// 7. Stage 2 Submission: Final Balance Settlement
 async function executeFinalSettlement() {
   const settleBtn = document.getElementById('finalSettleBtn');
   const progress = document.getElementById('settleProgress');

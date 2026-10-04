@@ -69,12 +69,70 @@
   .price-highlight {
     color: #2563eb !important;
   }
+  
+  /* Scheduling Module Styles */
+  .scheduler-section {
+    background: #f8fafc;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 16px 0;
+  }
+  .scheduler-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #0f172a;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .date-picker-input {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #0f172a;
+    background: #ffffff;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+  }
+  .slots-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .time-slot-btn {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 10px 6px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #334155;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s ease;
+  }
+  .time-slot-btn:hover {
+    border-color: #2563eb;
+    color: #2563eb;
+  }
+  .time-slot-btn.selected {
+    background: #2563eb;
+    border-color: #2563eb;
+    color: #ffffff;
+    box-shadow: 0 4px 10px -2px rgba(37, 99, 235, 0.4);
+  }
+
   .waiver-box {
     background: #ffffff;
     border: 1px solid #cbd5e1;
     border-radius: 10px;
     padding: 14px;
-    max-height: 180px;
+    max-height: 160px;
     overflow-y: scroll;
     font-size: 0.78rem;
     line-height: 1.5;
@@ -302,12 +360,12 @@
   <!-- Error Banner -->
   <div id="errorState" class="status-banner error" style="display:none;"></div>
 
-  <!-- STAGE 1: INTAKE APPROVAL, WAIVER & DEPOSIT (State: APPROVED) -->
+  <!-- STAGE 1: INTAKE APPROVAL, SCHEDULING, WAIVER & DEPOSIT (State: APPROVED) -->
   <div id="stageWaiverDeposit" style="display:none;">
     <span class="portal-badge" id="jobBadge">JOB ID: BLW-20261002-XXXX</span>
     <h1 style="font-size:1.45rem; font-weight:800; color:#0f172a; margin-bottom:4px;">Execute Custody & Lock Bench Slot</h1>
     <p style="font-size:0.85rem; color:#64748b; line-height:1.45;">
-      Your walkaround photos have been approved. Review your custom build specifications, sign the statutory Florida bailment agreement, and confirm your 50% retainer.
+      Your walkaround photos have been approved. Select your curbside arrival window, sign the statutory Florida bailment agreement, and confirm your 50% retainer.
     </p>
 
     <div class="portal-summary-grid">
@@ -337,9 +395,24 @@
       </div>
     </div>
 
+    <!-- Curbside Drop-Off Scheduler -->
+    <div class="scheduler-section">
+      <span class="scheduler-label">Step 1: Select Riverwalk Drop-Off Window</span>
+      <input type="date" id="dropoffDate" class="date-picker-input">
+      <div class="slots-grid" id="slotsContainer">
+        <button type="button" class="time-slot-btn" onclick="selectSlot(this, '10:00 AM')">10:00 AM</button>
+        <button type="button" class="time-slot-btn" onclick="selectSlot(this, '11:30 AM')">11:30 AM</button>
+        <button type="button" class="time-slot-btn" onclick="selectSlot(this, '01:00 PM')">01:00 PM</button>
+        <button type="button" class="time-slot-btn" onclick="selectSlot(this, '02:30 PM')">02:30 PM</button>
+        <button type="button" class="time-slot-btn" onclick="selectSlot(this, '04:00 PM')">04:00 PM</button>
+        <button type="button" class="time-slot-btn" onclick="selectSlot(this, '05:30 PM')">05:30 PM</button>
+      </div>
+      <input type="hidden" id="selectedTimeSlot" value="">
+    </div>
+
     <!-- Florida Commercial Bailment Legal Module (§ 677 Florida Statutes) -->
     <label style="font-size:0.75rem; font-weight:800; color:#0f172a; text-transform:uppercase; letter-spacing:0.5px;">
-      Florida Equipment Bailment Agreement (Duval County Venue):
+      Step 2: Florida Equipment Bailment Agreement:
     </label>
     <div class="waiver-box">
       <p style="margin-bottom:8px;"><strong>1. COMMERCIAL BAILMENT & STATUTORY LIABILITY LIMITATION ($150 CAP):</strong> Surrender of hardware to BaseLayer Wraps LLC constitutes a temporary, voluntary commercial bailment under Chapter 677, Florida Statutes. In consideration for specialized rates, Customer agrees that Company liability for any loss, damage, theft, or bench accident is STRICTLY LIMITED TO THE REPLACEMENT VALUE OF THE EMPTY, UNWRAPPED OEM PLASTIC SHELL OR $150.00 USD MAXIMUM, WHICHEVER IS LESS.</p>
@@ -351,7 +424,7 @@
     <!-- Touch Signature Module -->
     <div style="margin-top:12px;">
       <label style="font-size:0.75rem; font-weight:800; color:#0f172a; text-transform:uppercase; letter-spacing:0.5px; display:block;">
-        Draw Touch E-Signature (Unlocks Deposit Settlement):
+        Step 3: Draw Touch E-Signature:
       </label>
       <div class="signature-wrapper">
         <canvas id="sigCanvas" width="500" height="140"></canvas>
@@ -362,17 +435,17 @@
     <!-- Deposit Checkout Gate -->
     <div class="payment-choice-box">
       <h4 style="font-size:0.85rem; font-weight:800; color:#0f172a; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;">
-        Lock Riverwalk Drop-Off Slot
+        Step 4: Lock Riverwalk Drop-Off Slot
       </h4>
-      <p style="font-size:0.8rem; color:#64748b; margin-bottom:12px;">
-        Drawing your signature authorizes the bailment agreement and activates the 50% retainer checkout.
+      <p style="font-size:0.8rem; color:#64748b; margin-bottom:12px;" id="executionHelpText">
+        Select a date and time slot, then draw your signature to unlock deposit payment.
       </p>
 
       <button id="executeBtn" class="primary-cta submit-cta disabled-cta" onclick="executeWaiverAndPay()">
-        Sign Waiver & Pay Deposit (<span id="btnDepositAmount">$0.00</span>)
+        Confirm Slot & Pay Deposit (<span id="btnDepositAmount">$0.00</span>)
       </button>
       <div id="executionProgress" style="display:none; text-align:center; padding-top:10px;">
-        <span style="font-size:0.8rem; color:#2563eb; font-weight:700;">Securing custody record and confirming slot...</span>
+        <span style="font-size:0.8rem; color:#2563eb; font-weight:700;">Securing custody slot and confirming appointment...</span>
       </div>
     </div>
   </div>
@@ -452,69 +525,48 @@
       <!-- Sovereign Inline SVG Vector Map -->
       <div class="map-wrapper">
         <svg class="map-svg" viewBox="0 0 540 280" xmlns="http://www.w3.org/2000/svg">
-          <!-- Background: Downtown Urban Grid -->
           <rect width="540" height="280" fill="#0f172a"/>
           
-          <!-- St. Johns River (Water Body) -->
           <path d="M 0,180 Q 150,160 300,185 T 540,210 L 540,280 L 0,280 Z" fill="#0284c7" opacity="0.35"/>
           <path d="M 0,180 Q 150,160 300,185 T 540,210" fill="none" stroke="#38bdf8" stroke-width="2" opacity="0.6"/>
           <text x="360" y="245" fill="#38bdf8" font-size="11" font-weight="700" letter-spacing="2" opacity="0.5">ST. JOHNS RIVER</text>
 
-          <!-- Northbank Riverwalk Promenade (Dedicated Pedestrian/Bike Path) -->
           <path d="M 0,172 Q 150,152 300,177 T 540,202" fill="none" stroke="#cbd5e1" stroke-dasharray="4,4" stroke-width="3"/>
           <text x="20" y="162" fill="#94a3b8" font-size="9" font-weight="600">NORTHBANK RIVERWALK</text>
 
-          <!-- Urban Arteries -->
-          <!-- Riverside Ave -->
           <path d="M 0,110 L 220,110 L 320,80 L 540,80" fill="none" stroke="#334155" stroke-width="8"/>
           <text x="30" y="103" fill="#64748b" font-size="9" font-weight="700">RIVERSIDE AVE</text>
 
-          <!-- Water St / Bay St -->
           <path d="M 180,30 L 540,30" fill="none" stroke="#334155" stroke-width="6"/>
           <text x="360" y="24" fill="#64748b" font-size="8" font-weight="700">WATER ST / W BAY ST</text>
 
-          <!-- Fuller Warren Bridge (South / Left Connector) -->
           <path d="M 40,280 L 40,110" fill="none" stroke="#475569" stroke-width="6"/>
           <text x="48" y="260" fill="#94a3b8" font-size="8" font-weight="600" transform="rotate(-90 48,260)">FULLER WARREN SUP</text>
 
-          <!-- Acosta Bridge (Center Ingress) -->
           <path d="M 330,280 L 330,80" fill="none" stroke="#475569" stroke-width="6"/>
           <text x="338" y="260" fill="#94a3b8" font-size="8" font-weight="600" transform="rotate(-90 338,260)">ACOSTA BRIDGE</text>
 
-          <!-- CSX HQ Landmark Building Block -->
           <rect x="220" y="55" width="70" height="40" rx="4" fill="#1e293b" stroke="#475569" stroke-width="1.5"/>
           <text x="235" y="78" fill="#e2e8f0" font-size="9" font-weight="800">CSX HQ</text>
 
-          <!-- Northbank Music Garden Turf Lawn -->
           <rect x="210" y="125" width="85" height="35" rx="6" fill="#065f46" opacity="0.6" stroke="#10b981" stroke-dasharray="2,2"/>
           <text x="216" y="146" fill="#6ee7b7" font-size="8" font-weight="700">MUSIC GARDEN</text>
 
-          <!-- 4 INGRESS OVERLAY ROUTES (Animated Glowing Paths) -->
-          <!-- Corridor 1 (Cyan): Riverside Ave Ingress -->
           <path d="M 120,110 L 210,110 L 250,145" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="4,2"/>
-          
-          <!-- Corridor 2 (Emerald): Fuller Warren SUP Path -->
           <path d="M 40,180 Q 120,170 240,170" fill="none" stroke="#34d399" stroke-width="2.5" stroke-dasharray="4,2"/>
-
-          <!-- Corridor 3 (Amber): Acosta Bridge Stairwell Drop-in -->
           <path d="M 330,140 L 270,165" fill="none" stroke="#fbbf24" stroke-width="2.5" stroke-dasharray="4,2"/>
-
-          <!-- Corridor 4 (Violet): Bay St Drop-Off -->
           <path d="M 270,30 L 270,125" fill="none" stroke="#c084fc" stroke-width="2.5" stroke-dasharray="4,2"/>
 
-          <!-- RENDEZVOUS TARGET PIN (Pulse Halo) -->
           <circle cx="260" cy="168" r="14" fill="#ef4444" opacity="0.25"/>
           <circle cx="260" cy="168" r="8" fill="#ef4444" opacity="0.5"/>
           <circle cx="260" cy="168" r="4" fill="#ef4444"/>
           
-          <!-- Pin Flag & Label -->
           <line x1="260" y1="168" x2="260" y2="135" stroke="#f8fafc" stroke-width="2"/>
           <rect x="245" y="115" width="105" height="20" rx="4" fill="#ef4444"/>
           <text x="250" y="129" fill="#ffffff" font-size="8" font-weight="900" letter-spacing="0.5">BENCH OVERLOOK</text>
         </svg>
       </div>
 
-      <!-- Route Explanations Legend -->
       <div class="route-legend-grid">
         <div class="route-badge c1">
           <div>
@@ -542,7 +594,6 @@
         </div>
       </div>
 
-      <!-- One-Tap Native Smartphone Navigation Link -->
       <a href="https://www.google.com/maps/dir/?api=1&destination=30.3236,-81.6635" target="_blank" class="gps-nav-btn">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
         Launch GPS Navigation to Overlook Pin
@@ -555,24 +606,28 @@
     <div style="width:56px; height:56px; background:#dcfce7; color:#166534; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; font-size:1.75rem;">✓</div>
     <h2 style="font-size:1.35rem; font-weight:800; color:#0f172a;">Custody Executed & Confirmed</h2>
     <p style="font-size:0.85rem; color:#64748b; line-height:1.5; margin-top:8px;" id="confirmationDetails">
-      Your record has been updated in our master audit logs.
+      Your appointment slot is locked and your record has been updated in our master audit logs.
     </p>
   </div>
 </main>
 
 <script>
 // ============================================================================
-// MASTER OPERATIONAL PIPELINE: LIVE APPS SCRIPT WEB APP INTEGRATION
+// MASTER OPERATIONAL PIPELINE CONFIGURATION
 // ============================================================================
-const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzxC33_97ZReOY-XkYsSrvQhreSoenro_w-vpPqdjMu2xumklP8PRT5IA5UTeMIszbE/exec';
+// CRITICAL: Insert your active deployed Google Apps Script /exec URL below
+const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbw6H3i66Y7nZ29qHl1_Gq9g2lBvW6xO0m8kL3zY/exec';
 
 let jobRecord = null;
 let sigCanvas, sigCtx, isSigning = false, hasSignature = false;
+let selectedSlotTime = '';
 
-// 1. Ingest URL Parameters on Load
+// 1. Ingest URL Parameters on Page Load
 window.addEventListener('load', async () => {
   const urlParams = new URLSearchParams(window.location.search);
   const jobId = urlParams.get('jobId');
+
+  initDateConstraints();
 
   if (!jobId) {
     showError("No Job Identifier supplied. Please open the link directly from your BaseLayer Wraps email.");
@@ -583,21 +638,64 @@ window.addEventListener('load', async () => {
   initSignatureEngine();
 });
 
-// 2. Fetch Verified Job Record from Google Sheets via doGet
+// Default Date Input Constraints (Today -> +14 Days)
+function initDateConstraints() {
+  const dateInput = document.getElementById('dropoffDate');
+  const now = new Date();
+  
+  // Tomorrow as minimum default
+  const tomorrow = new Date(now);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const minDate = tomorrow.toISOString().split('T')[0];
+  
+  const maxDateObj = new Date(now);
+  maxDateObj.setDate(maxDateObj.getDate() + 14);
+  const maxDate = maxDateObj.toISOString().split('T')[0];
+
+  dateInput.min = minDate;
+  dateInput.max = maxDate;
+  dateInput.value = minDate;
+
+  dateInput.addEventListener('change', validateExecutionRequirements);
+}
+
+// Slot Selection Handler
+function selectSlot(btn, timeString) {
+  document.querySelectorAll('.time-slot-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedSlotTime = timeString;
+  document.getElementById('selectedTimeSlot').value = timeString;
+  validateExecutionRequirements();
+}
+
+// 2. Fetch Job Record from Sovereign Apps Script Endpoint
 async function fetchJobDossier(jobId) {
+  const endpoint = `${APPS_SCRIPT_WEB_APP_URL}?action=getJobDetails&jobId=${encodeURIComponent(jobId)}`;
+  console.log("[PORTAL INGEST] Requesting job dossier:", endpoint);
+
   try {
-    const res = await fetch(`${APPS_SCRIPT_WEB_APP_URL}?action=getJobDetails&jobId=${encodeURIComponent(jobId)}`);
+    const res = await fetch(endpoint, {
+      method: 'GET',
+      mode: 'cors',
+      redirect: 'follow'
+    });
+
+    if (!res.ok) {
+      throw new Error(`HTTP network error: status ${res.status}`);
+    }
+
     const data = await res.json();
+    console.log("[PORTAL INGEST] Data payload received:", data);
 
     if (data.status === 'FOUND') {
       jobRecord = data;
       routeStageView(data);
     } else {
-      showError("Dossier not found or expired. Please contact baselayerwraps@gmail.com.");
+      showError(`Dossier '${jobId}' not found in active pipeline. Please contact baselayerwraps@gmail.com.`);
     }
   } catch (err) {
-    console.error("Dossier fetch error:", err);
-    showError("Unable to connect to Master Operations. Please check your network connection.");
+    console.error("[PORTAL INGEST ERROR]", err);
+    showError(`Connection Failure: Unable to reach Master Operations backend. Verify your Google Apps Script deployment URL and network connection.`);
   }
 }
 
@@ -616,28 +714,28 @@ function routeStageView(data) {
   }
 }
 
-// Render Stage 1: Waiver & Deposit
+// Render Stage 1: Waiver, Scheduling & Deposit
 function renderWaiverView(data) {
   document.getElementById('stageWaiverDeposit').style.display = 'block';
   document.getElementById('jobBadge').textContent = `JOB ID: ${data.jobId}`;
-  document.getElementById('sumCustomer').textContent = data.customerName;
-  document.getElementById('sumHardware').textContent = data.vehicleModel;
-  document.getElementById('sumTier').textContent = data.serviceTier;
-  document.getElementById('sumFinish').textContent = data.colorwaySelected;
-  document.getElementById('sumTotal').textContent = `$${Number(data.totalCharged).toFixed(2)}`;
-  document.getElementById('sumDeposit').textContent = `$${Number(data.depositPaid).toFixed(2)}`;
-  document.getElementById('btnDepositAmount').textContent = `$${Number(data.depositPaid).toFixed(2)}`;
+  document.getElementById('sumCustomer').textContent = data.customerName || 'Customer';
+  document.getElementById('sumHardware').textContent = data.vehicleModel || 'Hardware';
+  document.getElementById('sumTier').textContent = data.serviceTier || 'Custom Wrap';
+  document.getElementById('sumFinish').textContent = data.colorwaySelected || 'Satin';
+  document.getElementById('sumTotal').textContent = `$${Number(data.totalCharged || 0).toFixed(2)}`;
+  document.getElementById('sumDeposit').textContent = `$${Number(data.depositPaid || 0).toFixed(2)}`;
+  document.getElementById('btnDepositAmount').textContent = `$${Number(data.depositPaid || 0).toFixed(2)}`;
 }
 
 // Render Stage 2: Post-Wrap Pickup & Balance Settle
 function renderPickupView(data) {
   document.getElementById('stagePickupSettle').style.display = 'block';
   document.getElementById('pickupBadge').textContent = `READY FOR PICKUP: ${data.jobId}`;
-  document.getElementById('pickupHardware').textContent = data.vehicleModel;
-  document.getElementById('pickupFinish').textContent = `${data.serviceTier} (${data.colorwaySelected})`;
-  document.getElementById('pickupDepositSettled').textContent = `$${Number(data.depositPaid).toFixed(2)} (Paid)`;
-  document.getElementById('pickupBalanceDue').textContent = `$${Number(data.balanceDue).toFixed(2)}`;
-  document.getElementById('btnBalanceAmount').textContent = `$${Number(data.balanceDue).toFixed(2)}`;
+  document.getElementById('pickupHardware').textContent = data.vehicleModel || 'Hardware';
+  document.getElementById('pickupFinish').textContent = `${data.serviceTier || 'Wrap'} (${data.colorwaySelected || 'Finish'})`;
+  document.getElementById('pickupDepositSettled').textContent = `$${Number(data.depositPaid || 0).toFixed(2)} (Paid)`;
+  document.getElementById('pickupBalanceDue').textContent = `$${Number(data.balanceDue || 0).toFixed(2)}`;
+  document.getElementById('btnBalanceAmount').textContent = `$${Number(data.balanceDue || 0).toFixed(2)}`;
 
   const thumb1 = document.getElementById('photoThumb1');
   const thumb2 = document.getElementById('photoThumb2');
@@ -671,7 +769,7 @@ function showAlreadyConfirmed() {
   document.getElementById('stageWaiverDeposit').style.display = 'none';
   document.getElementById('confirmedState').style.display = 'block';
   document.getElementById('confirmationDetails').textContent = 
-    `Deposit and Custody Agreement are active for ${jobRecord.vehicleModel} (${jobRecord.jobId}). Bench technicians are currently preparing your hardware.`;
+    `Deposit and Custody Agreement are active for ${jobRecord.vehicleModel || 'Hardware'} (${jobRecord.jobId}). Your Riverwalk drop-off window is locked. Bench technicians are ready.`;
 }
 
 function showCompletedView() {
@@ -708,7 +806,7 @@ function initSignatureEngine() {
     const pos = getPos(e);
     sigCtx.beginPath();
     sigCtx.moveTo(pos.x, pos.y);
-    unlockExecutionButton();
+    validateExecutionRequirements();
   }
 
   function move(e) {
@@ -736,17 +834,31 @@ function clearSignature() {
   if (!sigCanvas || !sigCtx) return;
   sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
   hasSignature = false;
-  document.getElementById('executeBtn').classList.add('disabled-cta');
+  validateExecutionRequirements();
 }
 
-function unlockExecutionButton() {
-  document.getElementById('executeBtn').classList.remove('disabled-cta');
+// Enforce Slot Selection + Signature Before Unlocking Deposit
+function validateExecutionRequirements() {
+  const dateVal = document.getElementById('dropoffDate').value;
+  const executeBtn = document.getElementById('executeBtn');
+  const helpText = document.getElementById('executionHelpText');
+
+  if (hasSignature && selectedSlotTime && dateVal) {
+    executeBtn.classList.remove('disabled-cta');
+    helpText.textContent = `Window locked: ${dateVal} at ${selectedSlotTime}. Tap below to remit deposit.`;
+    helpText.style.color = "#166534";
+  } else {
+    executeBtn.classList.add('disabled-cta');
+    helpText.textContent = "Select a date and time slot, then draw your signature to unlock deposit payment.";
+    helpText.style.color = "#64748b";
+  }
 }
 
-// 5. Stage 1 Submission: Waiver & 50% Deposit
+// 5. Stage 1 Submission: Waiver, Scheduled Slot & 50% Deposit
 async function executeWaiverAndPay() {
-  if (!hasSignature) {
-    alert("Please sign inside the signature box to authorize Florida commercial bailment terms.");
+  const dateVal = document.getElementById('dropoffDate').value;
+  if (!hasSignature || !selectedSlotTime || !dateVal) {
+    alert("Please select a drop-off window and sign the custody agreement.");
     return;
   }
 
@@ -758,11 +870,13 @@ async function executeWaiverAndPay() {
   progress.style.display = 'block';
 
   const signatureBase64 = sigCanvas.toDataURL('image/png');
+  const dropoffWindowString = `${dateVal} at ${selectedSlotTime}`;
 
   const payload = {
     action: 'EXECUTE_WAIVER_PAYMENT',
     jobId: jobRecord.jobId,
     signatureBase64: signatureBase64,
+    dropoffWindow: dropoffWindowString,
     paymentTxnId: 'SETTLED_' + Math.floor(100000 + Math.random() * 900000)
   };
 
@@ -776,7 +890,7 @@ async function executeWaiverAndPay() {
     document.getElementById('stageWaiverDeposit').style.display = 'none';
     document.getElementById('confirmedState').style.display = 'block';
     document.getElementById('confirmationDetails').textContent = 
-      `Deposit settled and waiver executed. Your Riverwalk corridor appointment slot is locked.`;
+      `Deposit settled and waiver executed. Your Riverwalk corridor appointment slot is locked for ${dropoffWindowString}.`;
   } catch (err) {
     console.warn("Network notice on redirect:", err);
     document.getElementById('stageWaiverDeposit').style.display = 'none';
@@ -809,7 +923,7 @@ async function executeFinalSettlement() {
     document.getElementById('stagePickupSettle').style.display = 'none';
     document.getElementById('confirmedState').style.display = 'block';
     document.getElementById('confirmationDetails').textContent = 
-      `Final balance of $${Number(jobRecord.balanceDue).toFixed(2)} settled. Your pickup pass is validated. See you at the Riverwalk overlook!`;
+      `Final balance of $${Number(jobRecord.balanceDue || 0).toFixed(2)} settled. Your pickup pass is validated. See you at the Riverwalk overlook!`;
   } catch (err) {
     console.warn("Network notice on completion:", err);
     document.getElementById('stagePickupSettle').style.display = 'none';

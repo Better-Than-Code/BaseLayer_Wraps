@@ -14,10 +14,11 @@
     align-items: center;
     justify-content: flex-start;
     min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   }
   .portal-card {
     background: #ffffff;
-    max-width: 600px;
+    max-width: 620px;
     width: 100%;
     border-radius: 18px;
     padding: 2rem;
@@ -151,7 +152,7 @@
     100% { transform: rotate(360deg); }
   }
 
-  /* Completion & Pickup Styles (§ 9 & § 10) */
+  /* Completion & Pickup Styles */
   .bench-photos-gallery {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -205,30 +206,79 @@
     color: #78350f;
     line-height: 1.45;
   }
-  .wayfinding-card {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
+
+  /* Vector Tactical Map Styles */
+  .wayfinding-container {
+    background: #0f172a;
+    border-radius: 14px;
     padding: 16px;
-    margin-top: 16px;
+    margin-top: 20px;
+    color: #f8fafc;
+    border: 1px solid #1e293b;
   }
-  .arterial-routes {
-    margin-top: 10px;
+  .map-wrapper {
+    position: relative;
+    width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #334155;
+    background: #1e293b;
+    margin: 12px 0;
+  }
+  .map-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .route-legend-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
+    margin-top: 10px;
+  }
+  .route-badge {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 8px;
+    border-radius: 8px;
     font-size: 0.72rem;
-    color: #475569;
+    border-left: 3px solid transparent;
   }
-  .arterial-item {
-    background: #ffffff;
-    padding: 6px 10px;
-    border-radius: 6px;
-    border: 1px solid #cbd5e1;
-  }
-  .arterial-item strong {
-    color: #0f172a;
+  .route-badge.c1 { border-left-color: #38bdf8; }
+  .route-badge.c2 { border-left-color: #34d399; }
+  .route-badge.c3 { border-left-color: #fbbf24; }
+  .route-badge.c4 { border-left-color: #c084fc; }
+  .route-badge strong {
     display: block;
+    color: #f8fafc;
+    font-size: 0.74rem;
+    margin-bottom: 2px;
+  }
+  .route-badge span {
+    color: #94a3b8;
+    line-height: 1.35;
+    display: block;
+  }
+  .gps-nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    background: #2563eb;
+    color: #ffffff;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-decoration: none;
+    margin-top: 12px;
+    transition: background 0.15s ease;
+  }
+  .gps-nav-btn:hover {
+    background: #1d4ed8;
   }
 </style>
 </head>
@@ -360,14 +410,14 @@
       </div>
     </div>
 
-    <!-- 48-Hour Cure Compliance Timer (§ 9.2) -->
+    <!-- 48-Hour Cure Compliance Timer -->
     <div class="cure-timer-banner">
       <div class="cure-timer-header">
         <span class="cure-timer-title">48-Hour Adhesive Cure Active</span>
         <span class="cure-countdown" id="cureCountdown">47h 59m</span>
       </div>
       <p class="cure-instruction">
-        <strong>Mandatory Care Notice:</strong> Chemical cross-linking is currently underway. Hardware must remain dry and protected from pressure washing, degreasers, and road puddles until the cure period expires.
+        <strong>Mandatory Care Notice:</strong> Cast vinyl cross-linking is currently active. Hardware must remain dry and protected from pressure washing, solvent degreasers, and deep puddle immersion until the cure countdown reaches zero.
       </p>
     </div>
 
@@ -377,7 +427,7 @@
         Settle Remaining 50% Balance
       </h4>
       <p style="font-size:0.8rem; color:#64748b; margin-bottom:12px;">
-        Clear balance before curbside pickup or finalize upon hand-off.
+        Clear balance online to instantly validate your Riverwalk hand-off release pass.
       </p>
       <button id="finalSettleBtn" class="primary-cta submit-cta" onclick="executeFinalSettlement()">
         Approve & Settle Balance (<span id="btnBalanceAmount">$0.00</span>)
@@ -387,20 +437,116 @@
       </div>
     </div>
 
-    <!-- Riverwalk Ingress Wayfinding (§ 10 & § 11) -->
-    <div class="wayfinding-card">
-      <h4 style="font-size:0.85rem; font-weight:800; color:#0f172a; text-transform:uppercase; letter-spacing:0.5px;">
-        Pickup Hub: CSX / Northbank Music Garden
-      </h4>
-      <p style="font-size:0.8rem; color:#64748b; margin-top:4px;">
-        Meet technician at the Riverwalk overlook outcropping. Four arterial ingress corridors:
-      </p>
-      <div class="arterial-routes">
-        <div class="arterial-item"><strong>Riverside Ave</strong> Pedestrian path past YMCA</div>
-        <div class="arterial-item"><strong>Acosta / Main Bridge</strong> Northbank Riverwalk stairs</div>
-        <div class="arterial-item"><strong>Fuller Warren SUP</strong> Dedicated shared-use path</div>
-        <div class="arterial-item"><strong>West Bay / Water St</strong> Direct corridor drop-in</div>
+    <!-- VECTOR TACTICAL WAYFINDING SYSTEM -->
+    <div class="wayfinding-container">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <h4 style="font-size:0.9rem; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; color:#f8fafc; margin:0;">
+            Pickup Hub: Riverwalk Overlook
+          </h4>
+          <span style="font-size:0.75rem; color:#94a3b8;">CSX & Northbank Music Garden Area</span>
+        </div>
+        <span style="font-size:0.65rem; background:#334155; padding:3px 8px; border-radius:4px; font-weight:700; color:#38bdf8;">LIVE GPS OVERLAY</span>
       </div>
+
+      <!-- Sovereign Inline SVG Vector Map -->
+      <div class="map-wrapper">
+        <svg class="map-svg" viewBox="0 0 540 280" xmlns="http://www.w3.org/2000/svg">
+          <!-- Background: Downtown Urban Grid -->
+          <rect width="540" height="280" fill="#0f172a"/>
+          
+          <!-- St. Johns River (Water Body) -->
+          <path d="M 0,180 Q 150,160 300,185 T 540,210 L 540,280 L 0,280 Z" fill="#0284c7" opacity="0.35"/>
+          <path d="M 0,180 Q 150,160 300,185 T 540,210" fill="none" stroke="#38bdf8" stroke-width="2" opacity="0.6"/>
+          <text x="360" y="245" fill="#38bdf8" font-size="11" font-weight="700" letter-spacing="2" opacity="0.5">ST. JOHNS RIVER</text>
+
+          <!-- Northbank Riverwalk Promenade (Dedicated Pedestrian/Bike Path) -->
+          <path d="M 0,172 Q 150,152 300,177 T 540,202" fill="none" stroke="#cbd5e1" stroke-dasharray="4,4" stroke-width="3"/>
+          <text x="20" y="162" fill="#94a3b8" font-size="9" font-weight="600">NORTHBANK RIVERWALK</text>
+
+          <!-- Urban Arteries -->
+          <!-- Riverside Ave -->
+          <path d="M 0,110 L 220,110 L 320,80 L 540,80" fill="none" stroke="#334155" stroke-width="8"/>
+          <text x="30" y="103" fill="#64748b" font-size="9" font-weight="700">RIVERSIDE AVE</text>
+
+          <!-- Water St / Bay St -->
+          <path d="M 180,30 L 540,30" fill="none" stroke="#334155" stroke-width="6"/>
+          <text x="360" y="24" fill="#64748b" font-size="8" font-weight="700">WATER ST / W BAY ST</text>
+
+          <!-- Fuller Warren Bridge (South / Left Connector) -->
+          <path d="M 40,280 L 40,110" fill="none" stroke="#475569" stroke-width="6"/>
+          <text x="48" y="260" fill="#94a3b8" font-size="8" font-weight="600" transform="rotate(-90 48,260)">FULLER WARREN SUP</text>
+
+          <!-- Acosta Bridge (Center Ingress) -->
+          <path d="M 330,280 L 330,80" fill="none" stroke="#475569" stroke-width="6"/>
+          <text x="338" y="260" fill="#94a3b8" font-size="8" font-weight="600" transform="rotate(-90 338,260)">ACOSTA BRIDGE</text>
+
+          <!-- CSX HQ Landmark Building Block -->
+          <rect x="220" y="55" width="70" height="40" rx="4" fill="#1e293b" stroke="#475569" stroke-width="1.5"/>
+          <text x="235" y="78" fill="#e2e8f0" font-size="9" font-weight="800">CSX HQ</text>
+
+          <!-- Northbank Music Garden Turf Lawn -->
+          <rect x="210" y="125" width="85" height="35" rx="6" fill="#065f46" opacity="0.6" stroke="#10b981" stroke-dasharray="2,2"/>
+          <text x="216" y="146" fill="#6ee7b7" font-size="8" font-weight="700">MUSIC GARDEN</text>
+
+          <!-- 4 INGRESS OVERLAY ROUTES (Animated Glowing Paths) -->
+          <!-- Corridor 1 (Cyan): Riverside Ave Ingress -->
+          <path d="M 120,110 L 210,110 L 250,145" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="4,2"/>
+          
+          <!-- Corridor 2 (Emerald): Fuller Warren SUP Path -->
+          <path d="M 40,180 Q 120,170 240,170" fill="none" stroke="#34d399" stroke-width="2.5" stroke-dasharray="4,2"/>
+
+          <!-- Corridor 3 (Amber): Acosta Bridge Stairwell Drop-in -->
+          <path d="M 330,140 L 270,165" fill="none" stroke="#fbbf24" stroke-width="2.5" stroke-dasharray="4,2"/>
+
+          <!-- Corridor 4 (Violet): Bay St Drop-Off -->
+          <path d="M 270,30 L 270,125" fill="none" stroke="#c084fc" stroke-width="2.5" stroke-dasharray="4,2"/>
+
+          <!-- RENDEZVOUS TARGET PIN (Pulse Halo) -->
+          <circle cx="260" cy="168" r="14" fill="#ef4444" opacity="0.25"/>
+          <circle cx="260" cy="168" r="8" fill="#ef4444" opacity="0.5"/>
+          <circle cx="260" cy="168" r="4" fill="#ef4444"/>
+          
+          <!-- Pin Flag & Label -->
+          <line x1="260" y1="168" x2="260" y2="135" stroke="#f8fafc" stroke-width="2"/>
+          <rect x="245" y="115" width="105" height="20" rx="4" fill="#ef4444"/>
+          <text x="250" y="129" fill="#ffffff" font-size="8" font-weight="900" letter-spacing="0.5">BENCH OVERLOOK</text>
+        </svg>
+      </div>
+
+      <!-- Route Explanations Legend -->
+      <div class="route-legend-grid">
+        <div class="route-badge c1">
+          <div>
+            <strong>1. Riverside Ave</strong>
+            <span>Pedestrian path past Florida Blue & YMCA directly into the turf lawn.</span>
+          </div>
+        </div>
+        <div class="route-badge c2">
+          <div>
+            <strong>2. Fuller Warren SUP</strong>
+            <span>Direct bike/scooter shared-use path connector from San Marco/Riverside.</span>
+          </div>
+        </div>
+        <div class="route-badge c3">
+          <div>
+            <strong>3. Acosta Bridge</strong>
+            <span>Northbank staircase/ramp descending straight onto the riverfront path.</span>
+          </div>
+        </div>
+        <div class="route-badge c4">
+          <div>
+            <strong>4. West Bay / Water St</strong>
+            <span>Curbside vehicle drop-off zone behind CSX building for fast haul-ins.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- One-Tap Native Smartphone Navigation Link -->
+      <a href="https://www.google.com/maps/dir/?api=1&destination=30.3236,-81.6635" target="_blank" class="gps-nav-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        Launch GPS Navigation to Overlook Pin
+      </a>
     </div>
   </div>
 
@@ -418,7 +564,7 @@
 // ============================================================================
 // MASTER OPERATIONAL PIPELINE: LIVE APPS SCRIPT WEB APP INTEGRATION
 // ============================================================================
-const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzxC33_97ZReOY-XkYsSrvQhreSoenro_w-vpPqdjMu2xumklP8PRT5IA5UTeMIszbE/exec';
+const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbw6H3i66Y7nZ29qHl1_Gq9g2lBvW6xO0m8kL3zY/exec';
 
 let jobRecord = null;
 let sigCanvas, sigCtx, isSigning = false, hasSignature = false;
@@ -460,16 +606,12 @@ function routeStageView(data) {
   document.getElementById('loadingState').style.display = 'none';
 
   if (data.pipelineStatus === 'READY_FOR_PICKUP') {
-    // Stage 2: Post-Wrap Approve & Pay
     renderPickupView(data);
   } else if (data.pipelineStatus === 'COMPLETED') {
-    // Stage 3: Fully Closed Record
     showCompletedView();
   } else if (data.pipelineStatus === 'PAID_DEPOSIT' || data.pipelineStatus === 'RECEIVED_TRIAGE' || data.pipelineStatus === 'IN_WORKSHOP') {
-    // Already Signed & In Progress
     showAlreadyConfirmed();
   } else {
-    // Stage 1: Sign Waiver & Pay Deposit
     renderWaiverView(data);
   }
 }
@@ -497,7 +639,6 @@ function renderPickupView(data) {
   document.getElementById('pickupBalanceDue').textContent = `$${Number(data.balanceDue).toFixed(2)}`;
   document.getElementById('btnBalanceAmount').textContent = `$${Number(data.balanceDue).toFixed(2)}`;
 
-  // Default workshop inspection thumbnails or fallback placeholders
   const thumb1 = document.getElementById('photoThumb1');
   const thumb2 = document.getElementById('photoThumb2');
   thumb1.src = data.customerPhoto1 || 'assets/bike-02.png';
@@ -652,7 +793,6 @@ async function executeFinalSettlement() {
   settleBtn.classList.add('disabled-cta');
   progress.style.display = 'block';
 
-  // Settles balance & updates status to COMPLETED
   const payload = {
     action: 'SETTLE_FINAL_BALANCE',
     jobId: jobRecord.jobId,

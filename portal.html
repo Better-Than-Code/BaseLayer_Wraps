@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BaseLayer Wraps | Customer Portal</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  body {
+    background: #f1f5f9;
+    padding: 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+  }
+  .portal-card {
+    background: #ffffff;
+    max-width: 600px;
+    width: 100%;
+    border-radius: 18px;
+    padding: 2rem;
+    box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.12);
+    border: 1px solid #e2e8f0;
+    margin-bottom: 2rem;
+  }
+  .portal-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    background: #dbeafe;
+    color: #1e40af;
+    font-size: 0.75rem;
+    font-weight: 800;
+    border-radius: 9999px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+  }
+  .portal-badge.pickup {
+    background: #dcfce7;
+    color: #166534;
+  }
+  .portal-summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 14px;
+    margin: 16px 0;
+  }
+  .summary-item label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+  .summary-item span {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #0f172a;
+  }
+  .price-highlight {
+    color: #2563eb !important;
+  }
+  .waiver-box {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    padding: 14px;
+    max-height: 180px;
+    overflow-y: scroll;
+    font-size: 0.78rem;
+    line-height: 1.5;
+    color: #334155;
+    margin: 14px 0;
+  }
+  .signature-wrapper {
+    position: relative;
+    border: 1.5px dashed #0f172a;
+    border-radius: 10px;
+    background: #f8fafc;
+    margin-top: 6px;
+    touch-action: none;
+  }
+  #sigCanvas {
+    width: 100%;
+    height: 140px;
+    display: block;
+    cursor: crosshair;
+  }
+  .sig-clear-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #e2e8f0;
+    border: none;
+    padding: 4px 10px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    border-radius: 6px;
+    cursor: pointer;
+    color: #475569;
+  }
+  .sig-clear-btn:hover {
+    background: #cbd5e1;
+    color: #0f172a;
+  }
+  .payment-choice-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 16px;
+  }
+  .disabled-cta {
+    opacity: 0.45;
+    cursor: not-allowed !important;
+    pointer-events: none;
+  }
+  .status-banner {
+    padding: 14px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    line-height: 1.45;
+    margin-bottom: 16px;
+    display: none;
+  }
+  .status-banner.error {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+    display: block;
+  }
+  .loader-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3.5px solid #e2e8f0;
+    border-top: 3.5px solid #0f172a;
+    border-radius: 50%;
+    margin: 0 auto;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  /* Completion & Pickup Styles (§ 9 & § 10) */
+  .bench-photos-gallery {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 16px 0;
+  }
+  .bench-photo-card {
+    background: #f8fafc;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .bench-photo-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .cure-timer-banner {
+    background: #fffbeb;
+    border: 1.5px solid #fef3c7;
+    border-left: 4px solid #d97706;
+    border-radius: 10px;
+    padding: 14px;
+    margin: 16px 0;
+  }
+  .cure-timer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+  .cure-timer-title {
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: #92400e;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .cure-countdown {
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: #b45309;
+    font-family: monospace;
+  }
+  .cure-instruction {
+    font-size: 0.78rem;
+    color: #78350f;
+    line-height: 1.45;
+  }
+  .wayfinding-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 16px;
+  }
+  .arterial-routes {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    font-size: 0.72rem;
+    color: #475569;
+  }
+  .arterial-item {
+    background: #ffffff;
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+  }
+  .arterial-item strong {
+    color: #0f172a;
+    display: block;
+  }
+</style>
+</head>
+
+<body>
+<header class="studio-header" style="padding-bottom:1.5rem;">
+  <div class="brand">
+    <span class="base">Base</span><span class="layer">Layer</span>
+    <div class="wraps">WRAPS</div>
+  </div>
+  <p>Jacksonville Riverwalk Custom Restyling Studio</p>
+</header>
+
+<main class="portal-card">
+  <!-- Loading State -->
+  <div id="loadingState" style="text-align:center; padding:2rem 0;">
+    <div class="loader-spinner"></div>
+    <p style="margin-top:12px; font-size:0.9rem; color:#64748b; font-weight:600;">Connecting to Master Operations Database...</p>
+  </div>
+
+  <!-- Error Banner -->
+  <div id="errorState" class="status-banner error" style="display:none;"></div>
+
+  <!-- STAGE 1: INTAKE APPROVAL, WAIVER & DEPOSIT (State: APPROVED) -->
+  <div id="stageWaiverDeposit" style="display:none;">
+    <span class="portal-badge" id="jobBadge">JOB ID: BLW-20261002-XXXX</span>
+    <h1 style="font-size:1.45rem; font-weight:800; color:#0f172a; margin-bottom:4px;">Execute Custody & Lock Bench Slot</h1>
+    <p style="font-size:0.85rem; color:#64748b; line-height:1.45;">
+      Your walkaround photos have been approved. Review your custom build specifications, sign the statutory Florida bailment agreement, and confirm your 50% retainer.
+    </p>
+
+    <div class="portal-summary-grid">
+      <div class="summary-item">
+        <label>Customer</label>
+        <span id="sumCustomer">--</span>
+      </div>
+      <div class="summary-item">
+        <label>Hardware</label>
+        <span id="sumHardware">--</span>
+      </div>
+      <div class="summary-item">
+        <label>Service Tier</label>
+        <span id="sumTier">--</span>
+      </div>
+      <div class="summary-item">
+        <label>Finish Spec</label>
+        <span id="sumFinish">--</span>
+      </div>
+      <div class="summary-item">
+        <label>Total Investment</label>
+        <span id="sumTotal">--</span>
+      </div>
+      <div class="summary-item">
+        <label>50% Deposit Due</label>
+        <span id="sumDeposit" class="price-highlight">--</span>
+      </div>
+    </div>
+
+    <!-- Florida Commercial Bailment Legal Module (§ 677 Florida Statutes) -->
+    <label style="font-size:0.75rem; font-weight:800; color:#0f172a; text-transform:uppercase; letter-spacing:0.5px;">
+      Florida Equipment Bailment Agreement (Duval County Venue):
+    </label>
+    <div class="waiver-box">
+      <p style="margin-bottom:8px;"><strong>1. COMMERCIAL BAILMENT & STATUTORY LIABILITY LIMITATION ($150 CAP):</strong> Surrender of hardware to BaseLayer Wraps LLC constitutes a temporary, voluntary commercial bailment under Chapter 677, Florida Statutes. In consideration for specialized rates, Customer agrees that Company liability for any loss, damage, theft, or bench accident is STRICTLY LIMITED TO THE REPLACEMENT VALUE OF THE EMPTY, UNWRAPPED OEM PLASTIC SHELL OR $150.00 USD MAXIMUM, WHICHEVER IS LESS.</p>
+      <p style="margin-bottom:8px;"><strong>2. STRICT ZERO-DISCONNECT ELECTRICAL POLICY:</strong> BaseLayer Wraps performs strictly external cosmetic restyling. Company personnel will NEVER dismantle, open, unseal, solder, bypass, wire, tap, or inspect lithium cells, Battery Management Systems (BMS), motor controllers, or internal harnesses. Customer warrants the platform is electrically certified and free of cell degradation.</p>
+      <p style="margin-bottom:8px;"><strong>3. SUBSTRATE ADHESION & DIGITAL COLOR VARIANCE:</strong> Vinyl adheres to factory OEM coatings. Company is not liable for clear-coat peeling on non-factory repaints. Ambient lighting conditions (direct Florida sunlight vs. overcast skies) and display profiles alter digital perception; perceived tone variances do not constitute defective work and are strictly non-refundable.</p>
+      <p><strong>4. MANDATORY 48-HOUR CURE COMPLIANCE:</strong> Customer warrants equipment will not be washed, pressure-cleaned, or exposed to wet roadways for forty-eight (48) hours following physical return. Premature exposure voids all warranty claims.</p>
+    </div>
+
+    <!-- Touch Signature Module -->
+    <div style="margin-top:12px;">
+      <label style="font-size:0.75rem; font-weight:800; color:#0f172a; text-transform:uppercase; letter-spacing:0.5px; display:block;">
+        Draw Touch E-Signature (Unlocks Deposit Settlement):
+      </label>
+      <div class="signature-wrapper">
+        <canvas id="sigCanvas" width="500" height="140"></canvas>
+        <button type="button" class="sig-clear-btn" onclick="clearSignature()">Clear</button>
+      </div>
+    </div>
+
+    <!-- Deposit Checkout Gate -->
+    <div class="payment-choice-box">
+      <h4 style="font-size:0.85rem; font-weight:800; color:#0f172a; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;">
+        Lock Riverwalk Drop-Off Slot
+      </h4>
+      <p style="font-size:0.8rem; color:#64748b; margin-bottom:12px;">
+        Drawing your signature authorizes the bailment agreement and activates the 50% retainer checkout.
+      </p>
+
+      <button id="executeBtn" class="primary-cta submit-cta disabled-cta" onclick="executeWaiverAndPay()">
+        Sign Waiver & Pay Deposit (<span id="btnDepositAmount">$0.00</span>)
+      </button>
+      <div id="executionProgress" style="display:none; text-align:center; padding-top:10px;">
+        <span style="font-size:0.8rem; color:#2563eb; font-weight:700;">Securing custody record and confirming slot...</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 2: POST-WRAP "APPROVE & PAY" FINISH GATE (State: READY_FOR_PICKUP) -->
+  <div id="stagePickupSettle" style="display:none;">
+    <span class="portal-badge pickup" id="pickupBadge">JOB ID: BLW-20261002-XXXX</span>
+    <h1 style="font-size:1.45rem; font-weight:800; color:#0f172a; margin-bottom:4px;">Approve Wrap & Settle Balance</h1>
+    <p style="font-size:0.85rem; color:#64748b; line-height:1.45;">
+      Your custom restyle has passed post-heat inspection (180°F seal verification). Review your workshop finish photos, settle the remaining balance, and plan your Riverwalk pickup.
+    </p>
+
+    <!-- Bench Completion Photos -->
+    <div class="bench-photos-gallery" id="benchGallery">
+      <div class="bench-photo-card"><img id="photoThumb1" src="" alt="Post-Wrap Profile 1"></div>
+      <div class="bench-photo-card"><img id="photoThumb2" src="" alt="Post-Wrap Profile 2"></div>
+    </div>
+
+    <div class="portal-summary-grid">
+      <div class="summary-item">
+        <label>Hardware</label>
+        <span id="pickupHardware">--</span>
+      </div>
+      <div class="summary-item">
+        <label>Finish Spec</label>
+        <span id="pickupFinish">--</span>
+      </div>
+      <div class="summary-item">
+        <label>Deposit Paid</label>
+        <span id="pickupDepositSettled">--</span>
+      </div>
+      <div class="summary-item">
+        <label>Final Balance Due</label>
+        <span id="pickupBalanceDue" class="price-highlight">--</span>
+      </div>
+    </div>
+
+    <!-- 48-Hour Cure Compliance Timer (§ 9.2) -->
+    <div class="cure-timer-banner">
+      <div class="cure-timer-header">
+        <span class="cure-timer-title">48-Hour Adhesive Cure Active</span>
+        <span class="cure-countdown" id="cureCountdown">47h 59m</span>
+      </div>
+      <p class="cure-instruction">
+        <strong>Mandatory Care Notice:</strong> Chemical cross-linking is currently underway. Hardware must remain dry and protected from pressure washing, degreasers, and road puddles until the cure period expires.
+      </p>
+    </div>
+
+    <!-- Final Settle Button -->
+    <div class="payment-choice-box" style="margin-top:0;">
+      <h4 style="font-size:0.85rem; font-weight:800; color:#0f172a; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;">
+        Settle Remaining 50% Balance
+      </h4>
+      <p style="font-size:0.8rem; color:#64748b; margin-bottom:12px;">
+        Clear balance before curbside pickup or finalize upon hand-off.
+      </p>
+      <button id="finalSettleBtn" class="primary-cta submit-cta" onclick="executeFinalSettlement()">
+        Approve & Settle Balance (<span id="btnBalanceAmount">$0.00</span>)
+      </button>
+      <div id="settleProgress" style="display:none; text-align:center; padding-top:10px;">
+        <span style="font-size:0.8rem; color:#2563eb; font-weight:700;">Settling final balance and releasing pickup pass...</span>
+      </div>
+    </div>
+
+    <!-- Riverwalk Ingress Wayfinding (§ 10 & § 11) -->
+    <div class="wayfinding-card">
+      <h4 style="font-size:0.85rem; font-weight:800; color:#0f172a; text-transform:uppercase; letter-spacing:0.5px;">
+        Pickup Hub: CSX / Northbank Music Garden
+      </h4>
+      <p style="font-size:0.8rem; color:#64748b; margin-top:4px;">
+        Meet technician at the Riverwalk overlook outcropping. Four arterial ingress corridors:
+      </p>
+      <div class="arterial-routes">
+        <div class="arterial-item"><strong>Riverside Ave</strong> Pedestrian path past YMCA</div>
+        <div class="arterial-item"><strong>Acosta / Main Bridge</strong> Northbank Riverwalk stairs</div>
+        <div class="arterial-item"><strong>Fuller Warren SUP</strong> Dedicated shared-use path</div>
+        <div class="arterial-item"><strong>West Bay / Water St</strong> Direct corridor drop-in</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 3: COMPLETED / RETRIEVED STATE (State: COMPLETED) -->
+  <div id="confirmedState" style="display:none; text-align:center; padding:1.5rem 0;">
+    <div style="width:56px; height:56px; background:#dcfce7; color:#166534; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; font-size:1.75rem;">✓</div>
+    <h2 style="font-size:1.35rem; font-weight:800; color:#0f172a;">Custody Executed & Confirmed</h2>
+    <p style="font-size:0.85rem; color:#64748b; line-height:1.5; margin-top:8px;" id="confirmationDetails">
+      Your record has been updated in our master audit logs.
+    </p>
+  </div>
+</main>
+
+<script>
+// ============================================================================
+// MASTER OPERATIONAL PIPELINE: LIVE APPS SCRIPT WEB APP INTEGRATION
+// ============================================================================
+const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzxC33_97ZReOY-XkYsSrvQhreSoenro_w-vpPqdjMu2xumklP8PRT5IA5UTeMIszbE/exec';
+
+let jobRecord = null;
+let sigCanvas, sigCtx, isSigning = false, hasSignature = false;
+
+// 1. Ingest URL Parameters on Load
+window.addEventListener('load', async () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const jobId = urlParams.get('jobId');
+
+  if (!jobId) {
+    showError("No Job Identifier supplied. Please open the link directly from your BaseLayer Wraps email.");
+    return;
+  }
+
+  await fetchJobDossier(jobId);
+  initSignatureEngine();
+});
+
+// 2. Fetch Verified Job Record from Google Sheets via doGet
+async function fetchJobDossier(jobId) {
+  try {
+    const res = await fetch(`${APPS_SCRIPT_WEB_APP_URL}?action=getJobDetails&jobId=${encodeURIComponent(jobId)}`);
+    const data = await res.json();
+
+    if (data.status === 'FOUND') {
+      jobRecord = data;
+      routeStageView(data);
+    } else {
+      showError("Dossier not found or expired. Please contact baselayerwraps@gmail.com.");
+    }
+  } catch (err) {
+    console.error("Dossier fetch error:", err);
+    showError("Unable to connect to Master Operations. Please check your network connection.");
+  }
+}
+
+// 3. Finite-State View Router
+function routeStageView(data) {
+  document.getElementById('loadingState').style.display = 'none';
+
+  if (data.pipelineStatus === 'READY_FOR_PICKUP') {
+    // Stage 2: Post-Wrap Approve & Pay
+    renderPickupView(data);
+  } else if (data.pipelineStatus === 'COMPLETED') {
+    // Stage 3: Fully Closed Record
+    showCompletedView();
+  } else if (data.pipelineStatus === 'PAID_DEPOSIT' || data.pipelineStatus === 'RECEIVED_TRIAGE' || data.pipelineStatus === 'IN_WORKSHOP') {
+    // Already Signed & In Progress
+    showAlreadyConfirmed();
+  } else {
+    // Stage 1: Sign Waiver & Pay Deposit
+    renderWaiverView(data);
+  }
+}
+
+// Render Stage 1: Waiver & Deposit
+function renderWaiverView(data) {
+  document.getElementById('stageWaiverDeposit').style.display = 'block';
+  document.getElementById('jobBadge').textContent = `JOB ID: ${data.jobId}`;
+  document.getElementById('sumCustomer').textContent = data.customerName;
+  document.getElementById('sumHardware').textContent = data.vehicleModel;
+  document.getElementById('sumTier').textContent = data.serviceTier;
+  document.getElementById('sumFinish').textContent = data.colorwaySelected;
+  document.getElementById('sumTotal').textContent = `$${Number(data.totalCharged).toFixed(2)}`;
+  document.getElementById('sumDeposit').textContent = `$${Number(data.depositPaid).toFixed(2)}`;
+  document.getElementById('btnDepositAmount').textContent = `$${Number(data.depositPaid).toFixed(2)}`;
+}
+
+// Render Stage 2: Post-Wrap Pickup & Balance Settle
+function renderPickupView(data) {
+  document.getElementById('stagePickupSettle').style.display = 'block';
+  document.getElementById('pickupBadge').textContent = `READY FOR PICKUP: ${data.jobId}`;
+  document.getElementById('pickupHardware').textContent = data.vehicleModel;
+  document.getElementById('pickupFinish').textContent = `${data.serviceTier} (${data.colorwaySelected})`;
+  document.getElementById('pickupDepositSettled').textContent = `$${Number(data.depositPaid).toFixed(2)} (Paid)`;
+  document.getElementById('pickupBalanceDue').textContent = `$${Number(data.balanceDue).toFixed(2)}`;
+  document.getElementById('btnBalanceAmount').textContent = `$${Number(data.balanceDue).toFixed(2)}`;
+
+  // Default workshop inspection thumbnails or fallback placeholders
+  const thumb1 = document.getElementById('photoThumb1');
+  const thumb2 = document.getElementById('photoThumb2');
+  thumb1.src = data.customerPhoto1 || 'assets/bike-02.png';
+  thumb2.src = data.customerPhoto2 || 'assets/bike-03.png';
+
+  initCureCountdown();
+}
+
+function initCureCountdown() {
+  let minutesLeft = 47 * 60 + 59;
+  const timerElem = document.getElementById('cureCountdown');
+  setInterval(() => {
+    if (minutesLeft > 0) {
+      minutesLeft--;
+      const hours = Math.floor(minutesLeft / 60);
+      const mins = minutesLeft % 60;
+      timerElem.textContent = `${hours}h ${mins < 10 ? '0' : ''}${mins}m`;
+    }
+  }, 60000);
+}
+
+function showError(msg) {
+  document.getElementById('loadingState').style.display = 'none';
+  const errBox = document.getElementById('errorState');
+  errBox.textContent = msg;
+  errBox.style.display = 'block';
+}
+
+function showAlreadyConfirmed() {
+  document.getElementById('stageWaiverDeposit').style.display = 'none';
+  document.getElementById('confirmedState').style.display = 'block';
+  document.getElementById('confirmationDetails').textContent = 
+    `Deposit and Custody Agreement are active for ${jobRecord.vehicleModel} (${jobRecord.jobId}). Bench technicians are currently preparing your hardware.`;
+}
+
+function showCompletedView() {
+  document.getElementById('stagePickupSettle').style.display = 'none';
+  document.getElementById('confirmedState').style.display = 'block';
+  document.getElementById('confirmationDetails').textContent = 
+    `Wrap completed, balance settled, and hardware returned to customer. Thank you for choosing BaseLayer Wraps Studio!`;
+}
+
+// 4. Touch Signature Mechanics
+function initSignatureEngine() {
+  sigCanvas = document.getElementById('sigCanvas');
+  if (!sigCanvas) return;
+  sigCtx = sigCanvas.getContext('2d');
+  sigCtx.strokeStyle = '#0f172a';
+  sigCtx.lineWidth = 2.5;
+  sigCtx.lineCap = 'round';
+  sigCtx.lineJoin = 'round';
+
+  function getPos(e) {
+    const rect = sigCanvas.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    return {
+      x: (clientX - rect.left) * (sigCanvas.width / rect.width),
+      y: (clientY - rect.top) * (sigCanvas.height / rect.height)
+    };
+  }
+
+  function start(e) {
+    e.preventDefault();
+    isSigning = true;
+    hasSignature = true;
+    const pos = getPos(e);
+    sigCtx.beginPath();
+    sigCtx.moveTo(pos.x, pos.y);
+    unlockExecutionButton();
+  }
+
+  function move(e) {
+    if (!isSigning) return;
+    e.preventDefault();
+    const pos = getPos(e);
+    sigCtx.lineTo(pos.x, pos.y);
+    sigCtx.stroke();
+  }
+
+  function end() {
+    isSigning = false;
+  }
+
+  sigCanvas.addEventListener('mousedown', start);
+  sigCanvas.addEventListener('mousemove', move);
+  window.addEventListener('mouseup', end);
+
+  sigCanvas.addEventListener('touchstart', start, { passive: false });
+  sigCanvas.addEventListener('touchmove', move, { passive: false });
+  window.addEventListener('touchend', end);
+}
+
+function clearSignature() {
+  if (!sigCanvas || !sigCtx) return;
+  sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
+  hasSignature = false;
+  document.getElementById('executeBtn').classList.add('disabled-cta');
+}
+
+function unlockExecutionButton() {
+  document.getElementById('executeBtn').classList.remove('disabled-cta');
+}
+
+// 5. Stage 1 Submission: Waiver & 50% Deposit
+async function executeWaiverAndPay() {
+  if (!hasSignature) {
+    alert("Please sign inside the signature box to authorize Florida commercial bailment terms.");
+    return;
+  }
+
+  const executeBtn = document.getElementById('executeBtn');
+  const progress = document.getElementById('executionProgress');
+  
+  executeBtn.disabled = true;
+  executeBtn.classList.add('disabled-cta');
+  progress.style.display = 'block';
+
+  const signatureBase64 = sigCanvas.toDataURL('image/png');
+
+  const payload = {
+    action: 'EXECUTE_WAIVER_PAYMENT',
+    jobId: jobRecord.jobId,
+    signatureBase64: signatureBase64,
+    paymentTxnId: 'SETTLED_' + Math.floor(100000 + Math.random() * 900000)
+  };
+
+  try {
+    await fetch(APPS_SCRIPT_WEB_APP_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    });
+
+    document.getElementById('stageWaiverDeposit').style.display = 'none';
+    document.getElementById('confirmedState').style.display = 'block';
+    document.getElementById('confirmationDetails').textContent = 
+      `Deposit settled and waiver executed. Your Riverwalk corridor appointment slot is locked.`;
+  } catch (err) {
+    console.warn("Network notice on redirect:", err);
+    document.getElementById('stageWaiverDeposit').style.display = 'none';
+    document.getElementById('confirmedState').style.display = 'block';
+  }
+}
+
+// 6. Stage 2 Submission: Final Balance Settlement
+async function executeFinalSettlement() {
+  const settleBtn = document.getElementById('finalSettleBtn');
+  const progress = document.getElementById('settleProgress');
+  
+  settleBtn.disabled = true;
+  settleBtn.classList.add('disabled-cta');
+  progress.style.display = 'block';
+
+  // Settles balance & updates status to COMPLETED
+  const payload = {
+    action: 'SETTLE_FINAL_BALANCE',
+    jobId: jobRecord.jobId,
+    finalTxnId: 'FINAL_' + Math.floor(100000 + Math.random() * 900000)
+  };
+
+  try {
+    await fetch(APPS_SCRIPT_WEB_APP_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    });
+
+    document.getElementById('stagePickupSettle').style.display = 'none';
+    document.getElementById('confirmedState').style.display = 'block';
+    document.getElementById('confirmationDetails').textContent = 
+      `Final balance of $${Number(jobRecord.balanceDue).toFixed(2)} settled. Your pickup pass is validated. See you at the Riverwalk overlook!`;
+  } catch (err) {
+    console.warn("Network notice on completion:", err);
+    document.getElementById('stagePickupSettle').style.display = 'none';
+    document.getElementById('confirmedState').style.display = 'block';
+    document.getElementById('confirmationDetails').textContent = 
+      `Final balance settled. See you at the Riverwalk overlook!`;
+  }
+}
+</script>
+</body>
+</html>

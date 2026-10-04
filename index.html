@@ -9,11 +9,12 @@
 
 <body>
 <header class="studio-header">
-    <div class="brand">
-      <span class="base">Base</span><span class="layer">Layer</span>
-      <div class="wraps">WRAPS</div>
+  <img src="assets/emblem.svg" class="header-emblem" alt="BaseLayer">
+  <div class="brand">
+    <span class="base">Base</span><span class="layer">Layer</span>
+    <div class="wraps">WRAPS</div>
   </div>
-<p>Bicycle and eScooter wraps and protection, Jacksonville, FL</p>
+  <p>Bicycle and eScooter wraps and protection, Jacksonville, FL</p>
 </header>
 
 <main class="showroom-stage">
@@ -27,7 +28,7 @@
     <div class="wood-counter"></div>
   </aside>
   <section class="center-stage">
-    <button class="primary-cta">Wrap It!</button>
+    <button class="primary-cta" onclick="openIntake()">Wrap It!</button>
   </section>
   <aside class="carousel-column right">
     <div class="perspective-carousel">
@@ -41,122 +42,923 @@
 </main>
 
 <section class="tier-showcase">
-  <div class="sw-wrap"><div class="sw"><button class="on" id="bBtn">Bicycles</button><button id="sBtn">eScooters</button></div></div>
-  <div class="w">
-    <div class="deck" id="deckBike">
-      <div class="c p0"><div class="k"><div class="f"><h3>Accent Layer</h3><img src="assets/bike-01.png"><span>$49</span></div><div class="b"><h4>Accent Layer</h4><p>Forks or battery</p><p>Cast vinyl</p><p>1-Day</p></div></div></div>
-      <div class="c p1"><div class="k"><div class="f"><h3>Base Layer</h3><img src="assets/bike-02.png"><span>$149</span></div><div class="b"><h4>Base Layer</h4><p>Main triangle</p><p>Cast vinyl</p><p>1-Day</p></div></div></div>
-      <div class="c p2"><div class="k"><div class="f"><h3>Over Layer</h3><img src="assets/bike-03.png"><span>$349</span></div><div class="b"><h4>Over Layer</h4><p>Full frame+stripes</p><p>Cast+Reflective</p><p>1-Day</p></div></div></div>
-      <div class="c p3"><div class="k"><div class="f"><h3>Protection</h3><img src="assets/bike-03.png"><span>$149</span></div><div class="b"><h4>Protection</h4><p>Full wear PPF</p><p>8mil Clear PPF</p><p>1-Day</p></div></div></div>
+  <div class="sw-wrap">
+    <div class="sw">
+      <button class="on" id="aBtn">Accents</button>
+      <button id="bBtn">Bicycles</button>
+      <button id="sBtn">eScooters</button>
     </div>
+  </div>
+  <div class="w">
+    <!-- Accents Deck -->
+    <div class="deck" id="deckAccent">
+      <div class="c p0" onclick="handleCardClick('battery')">
+        <div class="k">
+          <div class="f">
+            <h3>E-Bike Battery Accent</h3>
+            <div class="fanned-stack battery-stack">
+              <img class="fan-layer l-red" src="assets/battery-01.png" alt="Vampire Red">
+              <img class="fan-layer l-green" src="assets/battery-01.png" alt="Khaki Green">
+              <img class="fan-layer l-blue" src="assets/battery-01.png" alt="Ocean Shimmer">
+              <img class="fan-layer l-aluminum" src="assets/battery-01.png" alt="White Aluminum">
+            </div>
+            <span>$49</span>
+          </div>
+        </div>
+      </div>
+      <div class="c p1" onclick="handleCardClick('scooter-accent')">
+        <div class="k">
+          <div class="f">
+            <h3>Steering Stem Accent</h3>
+            <div class="fanned-stack">
+              <img class="fan-layer l-red" src="assets/scooter-01.png" alt="Vampire Red">
+              <img class="fan-layer l-green" src="assets/scooter-01.png" alt="Khaki Green">
+              <img class="fan-layer l-blue" src="assets/scooter-01.png" alt="Ocean Shimmer">
+              <img class="fan-layer l-aluminum" src="assets/scooter-01.png" alt="White Aluminum">
+            </div>
+            <span>$49</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bicycles Deck -->
+    <div class="deck" id="deckBike" style="display:none">
+      <div class="c p0" onclick="handleCardClick('bike-accent')">
+        <div class="k">
+          <div class="f">
+            <h3>Component Accent</h3>
+            <div class="fanned-stack">
+              <img class="fan-layer l-red" src="assets/bike-01.png" alt="Vampire Red">
+              <img class="fan-layer l-green" src="assets/bike-01.png" alt="Khaki Green">
+              <img class="fan-layer l-blue" src="assets/bike-01.png" alt="Ocean Shimmer">
+              <img class="fan-layer l-aluminum" src="assets/bike-01.png" alt="White Aluminum">
+            </div>
+            <span>$49</span>
+          </div>
+        </div>
+      </div>
+      <div class="c p1" onclick="handleCardClick('bike-ppf')">
+        <div class="k">
+          <div class="f">
+            <h3>Surface Armor (PPF)</h3>
+            <div class="fanned-stack">
+              <img class="fan-layer l-red" src="assets/bike-03.png" alt="PPF Clear Profile">
+              <img class="fan-layer l-green" src="assets/bike-03.png" alt="PPF Clear Profile">
+              <img class="fan-layer l-blue" src="assets/bike-03.png" alt="PPF Clear Profile">
+              <img class="fan-layer l-aluminum" src="assets/bike-03.png" alt="PPF Clear Profile">
+            </div>
+            <span>$89</span>
+          </div>
+        </div>
+      </div>
+      <div class="c p2" onclick="handleCardClick('bike-base')">
+        <div class="k">
+          <div class="f">
+            <h3>Base Restyle</h3>
+            <div class="fanned-stack">
+              <img class="fan-layer l-red" src="assets/bike-02.png" alt="Vampire Red">
+              <img class="fan-layer l-green" src="assets/bike-02.png" alt="Khaki Green">
+              <img class="fan-layer l-blue" src="assets/bike-02.png" alt="Ocean Shimmer">
+              <img class="fan-layer l-aluminum" src="assets/bike-02.png" alt="White Aluminum">
+            </div>
+            <span>$149</span>
+          </div>
+        </div>
+      </div>
+      <div class="c p3" onclick="handleCardClick('bike-over')">
+        <div class="k">
+          <div class="f">
+            <h3>Full Livery Over-Layer</h3>
+            <div class="fanned-stack">
+              <img class="fan-layer l-red" src="assets/bike-03.png" alt="Vampire Red">
+              <img class="fan-layer l-green" src="assets/bike-03.png" alt="Khaki Green">
+              <img class="fan-layer l-blue" src="assets/bike-03.png" alt="Ocean Shimmer">
+              <img class="fan-layer l-aluminum" src="assets/bike-03.png" alt="White Aluminum">
+            </div>
+            <span>$299</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scooters Deck -->
     <div class="deck" id="deckScooter" style="display:none">
-      <div class="c p0"><div class="k"><div class="f"><h3>Accent Layer</h3><img src="assets/scooter-01.png"><span>$49</span></div><div class="b"><h4>Accent Layer</h4><p>Steering stem</p><p>Cast vinyl</p><p>1-Day</p></div></div></div>
-      <div class="c p1"><div class="k"><div class="f"><h3>Base Layer</h3><img src="assets/scooter-02.png"><span>$99</span></div><div class="b"><h4>Base Layer</h4><p>Stem, neck & deck</p><p>Cast vinyl</p><p>1-Day</p></div></div></div>
-      <div class="c p2"><div class="k"><div class="f"><h3>Over Layer</h3><img src="assets/scooter-03.png"><span>$199</span></div><div class="b"><h4>Over Layer</h4><p>Full + fork & fenders</p><p>Cast+Reflective</p><p>1-Day</p></div></div></div>
-      <div class="c p3"><div class="k"><div class="f"><h3>Protection</h3><img src="assets/scooter-03.png"><span>$79</span></div><div class="b"><h4>Protection</h4><p>High-wear PPF</p><p>8mil Clear PPF</p><p>1-Day</p></div></div></div>
+      <div class="c p0" onclick="handleCardClick('scooter-accent-layer')">
+        <div class="k">
+          <div class="f">
+            <h3>Component Accent</h3>
+            <div class="fanned-stack">
+              <img class="fan-layer l-red" src="assets/scooter-01.png" alt="Vampire Red">
+              <img class="fan-layer l-green" src="assets/scooter-01.png" alt="Khaki Green">
+              <img class="fan-layer l-blue" src="assets/scooter-01.png" alt="Ocean Shimmer">
+              <img class="fan-layer l-aluminum" src="assets/scooter-01.png" alt="White Aluminum">
+            </div>
+            <span>$49</span>
+          </div>
+        </div>
+      </div>
+      <div class="c p1" onclick="handleCardClick('scooter-ppf')">
+        <div class="k">
+          <div class="f">
+            <h3>Surface Armor (PPF)</h3>
+            <div class="fanned-stack">
+              <img class="fan-layer l-red" src="assets/scooter-03.png" alt="PPF Clear">
+              <img class="fan-layer l-green" src="assets/scooter-03.png" alt="PPF Clear">
+              <img class="fan-layer l-blue" src="assets/scooter-03.png" alt="PPF Clear">
+              <img class="fan-layer l-aluminum" src="assets/scooter-03.png" alt="PPF Clear">
+            </div>
+            <span>$89</span>
+          </div>
+        </div>
+      </div>
+      <div class="c p2" onclick="handleCardClick('scooter-base')">
+        <div class="k">
+          <div class="f">
+            <h3>Base Restyle</h3>
+            <div class="fanned-stack">
+              <img class="fan-layer l-red" src="assets/scooter-02.png" alt="Vampire Red">
+              <img class="fan-layer l-green" src="assets/scooter-02.png" alt="Khaki Green">
+              <img class="fan-layer l-blue" src="assets/scooter-02.png" alt="Ocean Shimmer">
+              <img class="fan-layer l-aluminum" src="assets/scooter-02.png" alt="White Aluminum">
+            </div>
+            <span>$149</span>
+          </div>
+        </div>
+      </div>
+      <div class="c p3" onclick="handleCardClick('scooter-over')">
+        <div class="k">
+          <div class="f">
+            <h3>Full Livery Over-Layer</h3>
+            <div class="fanned-stack">
+              <img class="fan-layer l-red" src="assets/scooter-03.png" alt="Vampire Red">
+              <img class="fan-layer l-green" src="assets/scooter-03.png" alt="Khaki Green">
+              <img class="fan-layer l-blue" src="assets/scooter-03.png" alt="Ocean Shimmer">
+              <img class="fan-layer l-aluminum" src="assets/scooter-03.png" alt="White Aluminum">
+            </div>
+            <span>$299</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="dots"><i class="dot on"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i></div>
 </section>
 
 <section class="motto-section">
-<p class="motto-text">Precision protection. Signature style.</p>
+  <p class="motto-text">Precision protection. Signature style.</p>
 </section>
+
 <footer class="studio-footer">
-<p>Wrapped with ❤️ in Jacksonville, FL</p>
-<div class="footer-links"><a href="#privacy" class="modal-link">Privacy</a> · <a href="#license" class="modal-link">License</a> · <a href="#contact" class="modal-link">Contact</a></div>
+  <p>Wrapped with ❤ in Jacksonville, FL</p>
+  <p class="footer-links">
+    <a href="#" onclick="openModal('privacy'); return false;">Privacy</a> &middot;
+    <a href="#" onclick="openModal('disclaimer'); return false;">Disclaimer</a> &middot;
+    <a href="#" onclick="openModal('waiverInfo'); return false;">Custody Waiver</a> &middot;
+    <a href="#" onclick="openModal('about'); return false;">About</a> &middot;
+    <a href="#" onclick="openModal('contact'); return false;">Contact</a>
+  </p>
 </footer>
+
+<!-- 1. Deep Dive Tier Modal -->
+<div id="tier-modal" class="modal-overlay" onclick="closeTierModal(event)">
+  <div class="modal-card" onclick="event.stopPropagation()">
+    <div class="modal-header-track">
+      <div class="tier-title-wrap">
+        <h2 id="tmTitle" class="modal-title">Service Tier</h2>
+        <span id="tmPrice" class="tier-modal-price">$0</span>
+      </div>
+      <button class="modal-close" onclick="closeTierModal()">&times;</button>
+    </div>
+    
+    <div class="tier-modal-preview">
+      <canvas id="tmCanvas" width="400" height="220"></canvas>
+      <div class="swatch-macro-chip" id="tmMacroChip" title="Manufacturer Film Finish">
+        <div id="tmMacroBox" class="macro-fill"></div>
+        <span id="tmMacroLabel">3M</span>
+      </div>
+    </div>
+
+    <div class="tier-modal-body">
+      <p id="tmDesc" class="tm-description"></p>
+
+      <div id="tmSwatchContainer">
+        <details class="inflow-swatch-details" id="tmSwatchDetails" open>
+          <summary class="inflow-swatch-summary">
+            <span class="swatch-summary-left">
+              <i class="swatch-dot" id="tmSummaryDot" style="background:#94a3b8"></i>
+              <span id="tmSummaryLabel">Color: White Aluminum</span>
+            </span>
+            <span class="swatch-toggle-icon">▾</span>
+          </summary>
+          <div class="inflow-swatches-grid" id="tmSwatches">
+            <label><input type="radio" name="tmFinish" value="White Aluminum" checked onchange="updateTierModalColor('aluminum')"><i style="background:#94a3b8"></i>White Aluminum</label>
+            <label><input type="radio" name="tmFinish" value="Khaki" onchange="updateTierModalColor('khaki')"><i style="background:#b5a68a"></i>Khaki</label>
+            <label><input type="radio" name="tmFinish" value="Black" onchange="updateTierModalColor('black')"><i style="background:#18181b"></i>Black</label>
+            <label><input type="radio" name="tmFinish" value="Battleship Gray" onchange="updateTierModalColor('grey')"><i style="background:#52525b"></i>Battleship Gray</label>
+            <label><input type="radio" name="tmFinish" value="White" onchange="updateTierModalColor('white')"><i style="background:#ffffff"></i>White</label>
+            <label><input type="radio" name="tmFinish" value="Vampire Red" onchange="updateTierModalColor('red')"><i style="background:#ba1628"></i>Vampire Red</label>
+            <label><input type="radio" name="tmFinish" value="Khaki Green" onchange="updateTierModalColor('green')"><i style="background:#4a563e"></i>Khaki Green</label>
+            <label><input type="radio" name="tmFinish" value="Ocean Shimmer" onchange="updateTierModalColor('blue')"><i style="background:#1e5b84"></i>Ocean Shimmer</label>
+            <label><input type="radio" name="tmFinish" value="Solar Gold" onchange="updateTierModalColor('gold')"><i style="background:#d4af37"></i>Solar Gold</label>
+            <label><input type="radio" name="tmFinish" value="Thundercloud" onchange="updateTierModalColor('orange')"><i style="background:#c45500"></i>Thundercloud</label>
+          </div>
+        </details>
+      </div>
+
+      <button type="button" class="primary-cta submit-cta" onclick="confirmTierSelection()">Wrap It!</button>
+    </div>
+  </div>
+</div>
+
+<!-- 2. Legal Policy Modal -->
+<div id="site-modal" class="modal-overlay modal-topmost" onclick="closeModal(event)">
+  <div class="modal-card" onclick="event.stopPropagation()">
+    <div class="modal-header-track">
+      <h2 id="modal-title" class="modal-title"></h2>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div id="modal-body" class="modal-body"></div>
+  </div>
+</div>
+
+<!-- 3. Storefront Intake Request Modal -->
+<div id="intake-modal" class="modal-overlay" onclick="closeIntake(event)">
+  <div class="modal-card" onclick="event.stopPropagation()">
+    <div class="modal-header-track">
+      <h2 class="modal-title">Request a Wrap</h2>
+      <button class="modal-close" onclick="closeIntake()">&times;</button>
+    </div>
+    
+    <form id="intakeForm" onsubmit="submitIntake(event)">
+      <input type="text" id="custName" required placeholder="Full Name">
+      <input type="email" id="custEmail" required placeholder="Email Address">
+      <input type="tel" id="custPhone" required placeholder="Mobile Phone">
+      <input type="text" id="rideInfo" required placeholder="Make & Model (e.g., RadRunner 2, Segway G30)">
+
+      <select id="wrapTier" onchange="handleIntakeTierChange(this.value)">
+        <option value="battery">Component Accent — $49</option>
+        <option value="ppf">Surface Armor (PPF) — $89</option>
+        <option value="base">Base Restyle — $149</option>
+        <option value="over">Full Livery Over-Layer — $299</option>
+      </select>
+
+      <div id="intakeSwatchContainer">
+        <details class="inflow-swatch-details" id="intakeSwatchDetails" open>
+          <summary class="inflow-swatch-summary">
+            <span class="swatch-summary-left">
+              <i class="swatch-dot" id="intakeSummaryDot" style="background:#94a3b8"></i>
+              <span id="intakeSummaryLabel">Color: White Aluminum</span>
+            </span>
+            <span class="swatch-toggle-icon">▾</span>
+          </summary>
+          <div class="inflow-swatches-grid">
+            <label><input type="radio" name="finish" value="White Aluminum" checked onchange="syncIntakeFinishUI(this.value, '#94a3b8')"><i style="background:#94a3b8"></i>White Aluminum</label>
+            <label><input type="radio" name="finish" value="Khaki" onchange="syncIntakeFinishUI(this.value, '#b5a68a')"><i style="background:#b5a68a"></i>Khaki</label>
+            <label><input type="radio" name="finish" value="Black" onchange="syncIntakeFinishUI(this.value, '#18181b')"><i style="background:#18181b"></i>Black</label>
+            <label><input type="radio" name="finish" value="Battleship Gray" onchange="syncIntakeFinishUI(this.value, '#52525b')"><i style="background:#52525b"></i>Battleship Gray</label>
+            <label><input type="radio" name="finish" value="White" onchange="syncIntakeFinishUI(this.value, '#ffffff')"><i style="background:#ffffff"></i>White</label>
+            <label><input type="radio" name="finish" value="Vampire Red" onchange="syncIntakeFinishUI(this.value, '#ba1628')"><i style="background:#ba1628"></i>Vampire Red</label>
+            <label><input type="radio" name="finish" value="Khaki Green" onchange="syncIntakeFinishUI(this.value, '#4a563e')"><i style="background:#4a563e"></i>Khaki Green</label>
+            <label><input type="radio" name="finish" value="Ocean Shimmer" onchange="syncIntakeFinishUI(this.value, '#1e5b84')"><i style="background:#1e5b84"></i>Ocean Shimmer</label>
+            <label><input type="radio" name="finish" value="Solar Gold" onchange="syncIntakeFinishUI(this.value, '#d4af37')"><i style="background:#d4af37"></i>Solar Gold</label>
+            <label><input type="radio" name="finish" value="Thundercloud" onchange="syncIntakeFinishUI(this.value, '#c45500')"><i style="background:#c45500"></i>Thundercloud</label>
+          </div>
+        </details>
+      </div>
+
+      <!-- Explicit Two-Slot Walkaround Photo Picker (§ 1.2) -->
+      <div class="photo-dual-slot-wrapper">
+        <span class="field-label-text">Walkaround Photos (Both Profiles Required)</span>
+        
+        <div class="photo-slot-grid">
+          <!-- Slot 1: Left Side -->
+          <div class="photo-slot-card" id="slotLeftCard">
+            <div class="slot-header">
+              <span class="slot-tag">1</span>
+              <label for="photoLeftInput" class="slot-title">Left Side Profile</label>
+            </div>
+            <input type="file" id="photoLeftInput" accept="image/*" required onchange="handleSingleSlotChange(this, 'left')">
+            <span class="slot-status-label" id="slotLeftLabel">Tap to select photo</span>
+          </div>
+
+          <!-- Slot 2: Right Side -->
+          <div class="photo-slot-card" id="slotRightCard">
+            <div class="slot-header">
+              <span class="slot-tag">2</span>
+              <label for="photoRightInput" class="slot-title">Right Side Profile</label>
+            </div>
+            <input type="file" id="photoRightInput" accept="image/*" required onchange="handleSingleSlotChange(this, 'right')">
+            <span class="slot-status-label" id="slotRightLabel">Tap to select photo</span>
+          </div>
+        </div>
+        <span id="photoValidationMsg" class="validation-msg"></span>
+      </div>
+
+      <div class="notes-block">
+        <label for="custNotes" class="field-label-text">Condition Notes & Special Requests</label>
+        <textarea id="custNotes" name="custNotes" rows="2" placeholder="List any known scratches, rock chips, clear-coat peeling, or custom ideas..."></textarea>
+      </div>
+
+      <div class="disclaimer-agreement">
+        <label>
+          <input type="checkbox" id="acceptDisclaimer" required>
+          <span>I accept the <a href="#" onclick="openModal('disclaimer'); return false;">BaseLayer Terms</a> ($150 Bailee Cap, Zero-Disconnect, Color Variance & 48-hr cure).</span>
+        </label>
+      </div>
+
+      <button type="submit" id="submitBtn" class="primary-cta submit-cta">Wrap It!</button>
+      <div id="diagnosticStatus" class="diag-status"></div>
+    </form>
+    
+    <div id="intakeProgress" style="display:none; text-align:center; padding:24px 0;">
+      <div class="loader-spinner"></div>
+      <h3 style="color:#0f172a; margin-top:14px; font-size:1.1rem;">Optimizing Dossier...</h3>
+      <p id="progressDetail" style="font-size:0.85rem; color:#64748b; margin-top:6px;">
+        Compressing images and transmitting custody records to Master Ops.
+      </p>
+    </div>
+
+    <div id="intakeDone" style="display:none; text-align:center; padding:12px 0;">
+      <h3 style="color:#0f172a;">Hardware Submitted for Review</h3>
+      <p id="intakeJobMsg" style="font-size:0.85rem; color:#64748b; line-height:1.45; margin-top:8px;">
+        Our technicians inspect all walkaround photos for substrate adhesion and battery casing clearance. Once approved, you will receive an email containing your <strong>50% deposit link and Custody Waiver</strong> to lock in your verified Riverwalk drop-off window.
+      </p>
+    </div>
+  </div>
+</div>
+
 <script>
-const P=['p0','p1','p2','p3'];let C=0,X=0,D=0,act='bike';
-const bD=document.getElementById('deckBike'),sD=document.getElementById('deckScooter');
-const bB=document.getElementById('bBtn'),sB=document.getElementById('sBtn');
-const dts=Array.from(document.querySelectorAll('.dot'));
-const curD=()=>act==='bike'?bD:sD;
-function u(){
-  const cs=Array.from(curD().querySelectorAll('.c'));
-  cs.forEach((e,i)=>{
-    e.className='c '+P[(i-C+4)%4];
-    if((i-C+4)%4!==0)e.classList.remove('flip');
+// ============================================================================
+// MASTER OPERATIONAL PIPELINE: LIVE APPS SCRIPT WEB APP INTEGRATION
+// ============================================================================
+const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzxC33_97ZReOY-XkYsSrvQhreSoenro_w-vpPqdjMu2xumklP8PRT5IA5UTeMIszbE/exec';
+
+// In-Memory Slot File Storage
+let slotFiles = {
+  left: null,
+  right: null
+};
+
+// Showroom Carousel Navigation Mechanics
+const P = ['p0', 'p1', 'p2', 'p3'];
+let C = 0, X = 0, D = 0, act = 'accents';
+const aD = document.getElementById('deckAccent');
+const bD = document.getElementById('deckBike');
+const sD = document.getElementById('deckScooter');
+const aB = document.getElementById('aBtn'), bB = document.getElementById('bBtn'), sB = document.getElementById('sBtn');
+const dts = Array.from(document.querySelectorAll('.dot'));
+const curD = () => act === 'accents' ? aD : (act === 'bike' ? bD : sD);
+
+function u() {
+  const d = curD();
+  if (!d) return;
+  const cs = Array.from(d.querySelectorAll('.c'));
+  cs.forEach((e, i) => {
+    e.className = 'c ' + P[(i - C + cs.length) % cs.length];
   });
-  dts.forEach((dot,i)=>dot.classList.toggle('on',i===C));
+  dts.forEach((dot, i) => {
+    dot.style.display = i < cs.length ? '' : 'none';
+    dot.classList.toggle('on', i === C);
+  });
 }
-function sw(to){
-  act=to;C=0;
-  if(to==='bike'){bD.style.display='';sD.style.display='none';bB.className='on';sB.className='';}
-  else{bD.style.display='none';sD.style.display='';bB.className='';sB.className='on';}
-  Array.from(document.querySelectorAll('.c')).forEach(e=>e.classList.remove('flip'));
+
+function sw(t) {
+  act = t;
+  C = 0;
+  aD.style.display = t === 'accents' ? '' : 'none';
+  bD.style.display = t === 'bike' ? '' : 'none';
+  sD.style.display = t === 'scooter' ? '' : 'none';
+  aB.className = t === 'accents' ? 'on' : '';
+  bB.className = t === 'bike' ? 'on' : '';
+  sB.className = t === 'scooter' ? 'on' : '';
   u();
 }
 
-bB.onclick=()=>sw('bike');sB.onclick=()=>sw('scooter');
-[bD,sD].forEach(deck=>{
-  deck.ontouchstart=e=>{X=e.touches[0].clientX;D=0;};
-  deck.ontouchmove=e=>{D=e.touches[0].clientX-X;};
-  deck.ontouchend=()=>{if(Math.abs(D)>30){C=(C+(D<0?1:3))%4;u();}};
-  deck.querySelectorAll('.c').forEach((card,i)=>{
-    card.onclick=()=>{if(card.classList.contains('p0')){card.classList.toggle('flip');}else{C=i;u();}};
-  });
+aB.onclick = () => sw('accents');
+bB.onclick = () => sw('bike');
+sB.onclick = () => sw('scooter');
+
+[aD, bD, sD].forEach(d => {
+  if (!d) return;
+  d.ontouchstart = e => { X = e.touches[0].clientX; D = 0; };
+  d.ontouchmove = e => { D = e.touches[0].clientX - X; };
+  d.ontouchend = () => {
+    const n = d.querySelectorAll('.c').length;
+    if (Math.abs(D) > 30) {
+      C = (C + (D < 0 ? 1 : n - 1)) % n;
+      u();
+    }
+  };
 });
 u();
 
-</script>
+function cleanDeckBatteryCards() {
+  document.querySelectorAll('#deckAccent img[src*="battery-01.png"]').forEach(img => {
+    if (img.dataset.deckCleaned) return;
+    const process = () => {
+      try {
+        const c = document.createElement('canvas');
+        const w = img.naturalWidth || 280;
+        const h = img.naturalHeight || 180;
+        if (!w || !h) return;
+        c.width = w; c.height = h;
+        const ctx = c.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+        const imgData = ctx.getImageData(0, 0, w, h);
+        const d = imgData.data;
+        for (let i = 0; i < d.length; i += 4) {
+          if (d[i] > 220 && d[i+1] > 220 && d[i+2] > 220) {
+            d[i+3] = 0;
+          }
+        }
+        ctx.putImageData(imgData, 0, 0);
+        img.src = c.toDataURL();
+        img.dataset.deckCleaned = 'true';
+      } catch (e) {}
+    };
+    img.complete ? process() : (img.onload = process);
+  });
+}
+window.addEventListener('load', cleanDeckBatteryCards);
 
-<script>
-(function(){
-  var card = document.getElementById('c1Card');
-  var cv = document.getElementById('c1Canvas');
-  if(!cv || !card) return;
-  var ctx = cv.getContext('2d');
-  var img = new Image();
-  var swatches = [
-    {hex:'#ba1628', bg:'#0a1128'}, // 3M Satin Vampire Red
-    {hex:'#4a563e', bg:'#221226'}, // Avery Satin Khaki Green
-    {hex:'#d4af37', bg:'#09090b'}  // Avery Satin Solar Gold
-  ];
-  var cur = 0;
-  function h2r(h){
-    var n = parseInt(h.replace('#',''), 16);
-    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+// Catalog Definitions
+const tierData = {
+  'battery': {
+    title: 'E-Bike Battery Accent',
+    price: '$49',
+    tierKey: 'battery',
+    type: 'battery',
+    isPPF: false,
+    img: 'assets/battery-01.png',
+    desc: 'Precision-cut cast wrap for external battery packs. Shields raw plastics from Florida UV degradation while preserving zero access to internal wiring or cell enclosures.'
+  },
+  'scooter-accent': {
+    title: 'Steering Stem Accent',
+    price: '$49',
+    tierKey: 'battery',
+    type: 'scooter',
+    isPPF: false,
+    img: 'assets/scooter-01.png',
+    desc: 'Full-length steering stem coverage defending primary rub zones against cable friction, transit abrasions, and road grit.'
+  },
+  'bike-accent': {
+    title: 'Component Accent',
+    price: '$49',
+    tierKey: 'battery',
+    type: 'bike',
+    isPPF: false,
+    img: 'assets/bike-01.png',
+    desc: 'Targeted high-contrast coverage on fork lowers, stay sections, or hardware shields using premium 3M 2080 or Avery Dennison SW900.'
+  },
+  'bike-ppf': {
+    title: 'Surface Armor (PPF)',
+    price: '$89',
+    tierKey: 'ppf',
+    type: 'bike',
+    isPPF: true,
+    img: 'assets/bike-03.png',
+    desc: 'High-impact 8mil optical clear TPU with self-healing topcoat. Complete stone chip, tailgate pad, and chain-slap defense across critical wear zones.'
+  },
+  'bike-base': {
+    title: 'Base Restyle',
+    price: '$149',
+    tierKey: 'base',
+    type: 'bike',
+    isPPF: false,
+    img: 'assets/bike-02.png',
+    desc: 'Full cosmetic solid restyle of the main structural frame triangle. Fully edge-sealed and post-heat set to 180°F specs.'
+  },
+  'bike-over': {
+    title: 'Full Livery Over-Layer',
+    price: '$299',
+    tierKey: 'over',
+    type: 'bike',
+    isPPF: false,
+    img: 'assets/bike-03.png',
+    desc: 'Multi-panel bespoke restyle package combining solid base cast vinyl with plotter-cut livery and Avery V-8000 micro-prismatic reflective accents.'
+  },
+  'scooter-accent-layer': {
+    title: 'Component Accent',
+    price: '$49',
+    tierKey: 'battery',
+    type: 'scooter',
+    isPPF: false,
+    img: 'assets/scooter-01.png',
+    desc: 'Steering column and latch mechanism wrap. Automotive-grade cast film with high UV resistance.'
+  },
+  'scooter-ppf': {
+    title: 'Surface Armor (PPF)',
+    price: '$89',
+    tierKey: 'ppf',
+    type: 'scooter',
+    isPPF: true,
+    img: 'assets/scooter-03.png',
+    desc: '8mil clear TPU armor applied to high-abrasion zones: kickplate, deck perimeter rails, and fork lowers.'
+  },
+  'scooter-base': {
+    title: 'Base Restyle',
+    price: '$149',
+    tierKey: 'base',
+    type: 'scooter',
+    isPPF: false,
+    img: 'assets/scooter-02.png',
+    desc: 'Complete chassis styling covering steering column, stem neck, and visible deck perimeter framework in premium satin cast film.'
+  },
+  'scooter-over': {
+    title: 'Full Livery Over-Layer',
+    price: '$299',
+    tierKey: 'over',
+    type: 'scooter',
+    isPPF: false,
+    img: 'assets/scooter-03.png',
+    desc: 'Complete stem, neck, deck, fender, and fork transformation with dual-layer vinyl and high-visibility night reflective striping.'
   }
-  function paint(idx){
-    var s = swatches[idx];
-    card.style.background = s.bg;
-    ctx.clearRect(0, 0, 240, 240);
-    ctx.drawImage(img, 0, 0, 240, 240);
+};
+
+let activeTierSelectedKey = 'battery';
+let currentTierItem = tierData['battery'];
+
+const colorSpecs = {
+  aluminum: { name: 'White Aluminum', hex: '#94a3b8', rgb: [148, 163, 184], brand: '3M', cssGrad: 'linear-gradient(135deg, #b0bec5 0%, #cfd8dc 35%, #90a4ae 65%, #78909c 100%)' },
+  khaki: { name: 'Khaki', hex: '#b5a68a', rgb: [181, 166, 138], brand: 'AVERY', cssGrad: 'linear-gradient(135deg, #c4b89f 0%, #d9cfb8 45%, #b5a68a 80%, #9e8f74 100%)' },
+  black: { name: 'Black', hex: '#18181b', rgb: [24, 24, 27], brand: '3M', cssGrad: 'linear-gradient(135deg, #27272a 0%, #3f3f46 40%, #18181b 70%, #09090b 100%)' },
+  grey: { name: 'Battleship Gray', hex: '#52525b', rgb: [82, 82, 91], brand: '3M', cssGrad: 'linear-gradient(135deg, #64748b 0%, #78889e 35%, #52525b 75%, #3f3f46 100%)' },
+  white: { name: 'White', hex: '#ffffff', rgb: [240, 240, 245], brand: '3M', cssGrad: 'linear-gradient(135deg, #f8fafc 0%, #ffffff 45%, #e2e8f0 85%, #cbd5e1 100%)' },
+  red: { name: 'Vampire Red', hex: '#ba1628', rgb: [186, 22, 40], brand: '3M', cssGrad: 'linear-gradient(135deg, #991b1b 0%, #dc2626 40%, #b91c1c 75%, #7f1d1d 100%)' },
+  green: { name: 'Khaki Green', hex: '#4a563e', rgb: [74, 86, 62], brand: 'AVERY', cssGrad: 'linear-gradient(135deg, #3f4e38 0%, #556b4d 40%, #44543b 75%, #2d3727 100%)' },
+  blue: { name: 'Ocean Shimmer', hex: '#1e5b84', rgb: [30, 91, 132], brand: '3M', cssGrad: 'linear-gradient(135deg, #0284c7 0%, #38bdf8 35%, #0369a1 70%, #075985 100%)' },
+  gold: { name: 'Solar Gold', hex: '#d4af37', rgb: [212, 175, 55], brand: 'AVERY', cssGrad: 'linear-gradient(135deg, #ca8a04 0%, #facc15 40%, #eab308 75%, #a16207 100%)' },
+  orange: { name: 'Thundercloud', hex: '#c45500', rgb: [196, 85, 0], brand: '3M', cssGrad: 'linear-gradient(135deg, #c2410c 0%, #fb923c 40%, #ea580c 75%, #9a3412 100%)' }
+};
+
+// Canvas Engine with PPF Neutral Strike-Zone Highlights
+function renderModalCanvas(colorKey) {
+  const canvas = document.getElementById('tmCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const img = new Image();
+  img.src = currentTierItem.img;
+
+  const macroChip = document.getElementById('tmMacroChip');
+  const macroBox = document.getElementById('tmMacroBox');
+  const macroLbl = document.getElementById('tmMacroLabel');
+
+  if (currentTierItem.isPPF) {
+    if (macroChip) macroChip.style.display = 'none';
+  } else {
+    if (macroChip) macroChip.style.display = 'flex';
+    const spec = colorSpecs[colorKey] || colorSpecs['aluminum'];
+    if (macroBox && macroLbl) {
+      macroBox.style.background = spec.cssGrad;
+      macroLbl.textContent = spec.brand;
+    }
+  }
+
+  img.onload = function() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const hRatio = canvas.width / img.width;
+    const vRatio = canvas.height / img.height;
+    const ratio = Math.min(hRatio, vRatio) * 0.88;
+    const centerShiftX = (canvas.width - img.width * ratio) / 2;
+    const centerShiftY = (canvas.height - img.height * ratio) / 2;
+
+    ctx.drawImage(img, 0, 0, img.width, img.height, centerShiftX, centerShiftY, img.width * ratio, img.height * ratio);
+
     try {
-      var imgData = ctx.getImageData(0, 0, 240, 240);
-      var d = imgData.data;
-      var rgb = h2r(s.hex);
-      var tR = rgb[0], tG = rgb[1], tB = rgb[2];
-      for(var i = 0; i < d.length; i += 4){
-        var r = d[i], g = d[i+1], b = d[i+2], a = d[i+3];
-        if(a > 30 && b > 100 && (b / (r || 1)) > 1.2 && (b / (g || 1)) > 1.1){
-          var lum = (r / 3.333 + g / 1.695 + b / 9.091) / 255;
-          var f = lum / (1 / 1.3);
-          d[i] = Math.min(255, Math.round(tR / (1 / f)));
-          d[i+1] = Math.min(255, Math.round(tG / (1 / f)));
-          d[i+2] = Math.min(255, Math.round(tB / (1 / f)));
+      const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const d = imgData.data;
+      const isBattery = currentTierItem.type === 'battery';
+      const isPPF = currentTierItem.isPPF;
+      const spec = colorSpecs[colorKey] || colorSpecs['aluminum'];
+      const targetRgb = spec.rgb;
+
+      for (let i = 0; i < d.length; i += 4) {
+        const r = d[i], g = d[i+1], b = d[i+2], a = d[i+3];
+
+        if (isBattery && r > 220 && g > 220 && b > 220) {
+          d[i+3] = 0;
+          continue;
+        }
+
+        if (a < 25) continue;
+
+        let isWrapZone = false;
+        if (isBattery) {
+          if (g > 95 && (g / (r || 1)) > 1.08 && (g / (b || 1)) > 1.08) isWrapZone = true;
+        } else {
+          if (b > 90 && (b / (r || 1)) > 1.12 && (b / (g || 1)) > 1.08) isWrapZone = true;
+        }
+
+        if (isWrapZone) {
+          if (isPPF) {
+            const lum = (r * 0.299 + g * 0.587 + b * 0.114);
+            const clearSheen = Math.min(255, lum * 0.85 + 40);
+            d[i]   = clearSheen;
+            d[i+1] = Math.min(255, clearSheen + 10);
+            d[i+2] = Math.min(255, clearSheen + 25);
+            d[i+3] = Math.min(255, a);
+          } else {
+            const lum = (r / 3.333 + g / 1.695 + b / 9.091) / 255;
+            const factor = (lum + 0.22) * 1.45;
+            d[i]   = Math.min(255, Math.round(targetRgb[0] * factor));
+            d[i+1] = Math.min(255, Math.round(targetRgb[1] * factor));
+            d[i+2] = Math.min(255, Math.round(targetRgb[2] * factor));
+          }
         }
       }
       ctx.putImageData(imgData, 0, 0);
-    } catch(e){ console.warn(e); }
+    } catch(err) {
+      console.warn("Canvas render fallback:", err);
+    }
+  };
+}
+
+function handleCardClick(key) {
+  const d = tierData[key];
+  if (!d) return;
+  activeTierSelectedKey = d.tierKey;
+  currentTierItem = d;
+
+  document.getElementById('tmTitle').textContent = d.title;
+  document.getElementById('tmPrice').textContent = d.price;
+  document.getElementById('tmDesc').textContent = d.desc;
+
+  const swatchContainer = document.getElementById('tmSwatchContainer');
+  if (d.isPPF) {
+    swatchContainer.style.display = 'none';
+    renderModalCanvas('aluminum');
+  } else {
+    swatchContainer.style.display = 'block';
+    const defaultRadio = document.querySelector('input[name="tmFinish"][value="White Aluminum"]');
+    if (defaultRadio) defaultRadio.checked = true;
+    updateTierModalColor('aluminum');
   }
-  img.onload = function(){ paint(0); };
-  img.onerror = function(){
-    if(img.src.indexOf('assets/') !== -1) img.src = 'bike-03.png';
-  };
-  img.src = 'assets/bike-03.png';
-  card.onclick = function(){
-    cur = (cur + 1) % swatches.length;
-    paint(cur);
-  };
-})();
+
+  document.getElementById('tier-modal').classList.add('active');
+}
+
+function updateTierModalColor(colorKey) {
+  const spec = colorSpecs[colorKey] || colorSpecs['aluminum'];
+  document.getElementById('tmSummaryDot').style.background = spec.hex;
+  document.getElementById('tmSummaryLabel').textContent = `Color: ${spec.name}`;
+  renderModalCanvas(colorKey);
+}
+
+function closeTierModal(e) {
+  if (!e || e.target.id === 'tier-modal' || e.target.classList.contains('modal-close')) {
+    document.getElementById('tier-modal').classList.remove('active');
+  }
+}
+
+function confirmTierSelection() {
+  const selectedFinishRadio = document.querySelector('input[name="tmFinish"]:checked');
+  const finishVal = currentTierItem.isPPF ? 'Optical Clear PPF' : (selectedFinishRadio ? selectedFinishRadio.value : 'White Aluminum');
+  closeTierModal();
+  openIntake(activeTierSelectedKey, finishVal);
+}
+
+function handleIntakeTierChange(tierVal) {
+  const container = document.getElementById('intakeSwatchContainer');
+  if (tierVal === 'ppf') {
+    container.style.display = 'none';
+  } else {
+    container.style.display = 'block';
+  }
+}
+
+function syncIntakeFinishUI(finishName, hexColor) {
+  document.getElementById('intakeSummaryDot').style.background = hexColor;
+  document.getElementById('intakeSummaryLabel').textContent = `Color: ${finishName}`;
+}
+
+// Independent Slot File Handler (§ 1.2 Operational Fix)
+function handleSingleSlotChange(input, slotKey) {
+  const card = document.getElementById(slotKey === 'left' ? 'slotLeftCard' : 'slotRightCard');
+  const label = document.getElementById(slotKey === 'left' ? 'slotLeftLabel' : 'slotRightLabel');
+  const validationMsg = document.getElementById('photoValidationMsg');
+
+  if (input.files && input.files[0]) {
+    slotFiles[slotKey] = input.files[0];
+    card.classList.add('filled');
+    label.textContent = `✓ ${input.files[0].name.substring(0, 18)}...`;
+  } else {
+    slotFiles[slotKey] = null;
+    card.classList.remove('filled');
+    label.textContent = 'Tap to select photo';
+  }
+
+  if (slotFiles.left && slotFiles.right) {
+    validationMsg.style.display = 'none';
+    validationMsg.textContent = '';
+  }
+}
+
+// Statutory Compliance Modals (§ 677 Florida Bailment & Variance)
+const modalData = {
+  privacy: {
+    title: "Privacy & Data Retention Policy",
+    body: "<p><strong>1. Information Collection:</strong> BaseLayer Wraps LLC collects contact details and inspection photos exclusively to evaluate substrates, generate estimates, and coordinate appointments.</p><p><strong>2. Retention:</strong> Data and inspection imagery are encrypted and retained for 12 months in our master operational archive to verify bailment condition under Florida law.</p><p><strong>3. Non-Disclosure:</strong> We do not sell, rent, or distribute customer information to marketing third parties.</p>"
+  },
+  disclaimer: {
+    title: "Terms of Service & Statutory Bailment Disclaimer",
+    body: "<p><strong>1. Commercial Bailment & $150 Liability Cap:</strong> Equipment surrender constitutes a commercial bailment governed by Florida Statutes Chapter 677. Company liability for accidental loss, destruction, or shop damages is strictly capped at the replacement cost of the bare plastic housing or <strong>$150.00 USD maximum</strong>.</p><p><strong>2. Zero-Disconnect Policy:</strong> BaseLayer Wraps performs strictly external surface styling. Technicians will never disassemble, unseal, bypass, or alter internal battery cells, Battery Management Systems (BMS), or high-voltage wiring harnesses.</p><p><strong>3. Digital Color Variance:</strong> Screen approximations naturally vary across displays (sRGB vs DCI-P3) and ambient lighting. Authentic manufacturer film specifications (3M 2080 / Avery SW900) are guaranteed, but tone variance from digital screens does not constitute grounds for refunds or re-wraps.</p><p><strong>4. 48-Hour Cure Window:</strong> Cast vinyl and PPF films require 48 hours for adhesive cross-linking. Customer agrees not to wash, spray, or expose vinyl seams to rain during this window.</p>"
+  },
+  waiverInfo: {
+    title: "Equipment Custody & Bailment Agreement",
+    body: "<p>All accepted bookings require an executed digital custody waiver and 50% retainer prior to Riverwalk bench scheduling.</p><p>Covers $150 bailee liability limitations, the absolute electrical zero-disconnect boundary, and mandatory 48-hour adhesive cure compliance.</p>"
+  },
+  about: {
+    title: "About BaseLayer Wraps Studio",
+    body: "<p>BaseLayer Wraps is a micro-mobility styling studio operating along the Jacksonville Riverwalk corridor, specializing in cast vinyl restyling and optical TPU armor for bikes and scooters.</p>"
+  },
+  contact: {
+    title: "Studio Dispatch & Appointments",
+    body: "<p><strong>Primary Hub:</strong> Jacksonville Riverwalk (CSX / Northbank Music Garden Area), Jacksonville, FL.</p><p><strong>Appointments:</strong> Operating Monday–Sunday by confirmed booking only.</p>"
+  }
+};
+
+function openModal(key) {
+  const data = modalData[key];
+  if (!data) return;
+  document.getElementById('modal-title').textContent = data.title;
+  document.getElementById('modal-body').innerHTML = data.body;
+  document.getElementById('site-modal').classList.add('active');
+}
+
+function closeModal(e) {
+  if (!e || e.target.id === 'site-modal' || e.target.classList.contains('modal-close')) {
+    document.getElementById('site-modal').classList.remove('active');
+  }
+}
+
+function openIntake(tier, color) {
+  const m = document.getElementById('intake-modal');
+  if (tier) {
+    document.getElementById('wrapTier').value = tier;
+    handleIntakeTierChange(tier);
+  }
+  if (color && color !== 'Optical Clear PPF') {
+    const radio = document.querySelector(`input[name="finish"][value="${color}"]`);
+    if (radio) {
+      radio.checked = true;
+      const spec = Object.values(colorSpecs).find(s => s.name === color);
+      if (spec) syncIntakeFinishUI(spec.name, spec.hex);
+    }
+  }
+  if (m) m.classList.add('active');
+}
+
+function closeIntake(e) {
+  const m = document.getElementById('intake-modal');
+  if (!e || e.target === m || e.target.classList.contains('modal-close')) {
+    if (m) m.classList.remove('active');
+  }
+}
+
+// In-Memory Canvas Compressor
+function compressImageFile(file, maxDimension = 1000, quality = 0.78) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target.result;
+      img.onload = () => {
+        let width = img.width;
+        let height = img.height;
+        if (width > height) {
+          if (width > maxDimension) {
+            height = Math.round((height * maxDimension) / width);
+            width = maxDimension;
+          }
+        } else {
+          if (height > maxDimension) {
+            width = Math.round((width * maxDimension) / height);
+            height = maxDimension;
+          }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+        resolve({
+          name: file.name,
+          mimeType: 'image/jpeg',
+          base64Data: compressedBase64
+        });
+      };
+      img.onerror = (err) => reject(err);
+    };
+    reader.onerror = (err) => reject(err);
+  });
+}
+
+// Asynchronous Intake Submission Pipeline
+async function submitIntake(e) {
+  e.preventDefault();
+
+  const validationMsg = document.getElementById('photoValidationMsg');
+  if (!slotFiles.left || !slotFiles.right) {
+    validationMsg.textContent = "Please attach a photo for both profiles (Left side and Right side).";
+    validationMsg.style.display = 'block';
+    return;
+  }
+
+  const submitBtn = document.getElementById('submitBtn');
+  const intakeForm = document.getElementById('intakeForm');
+  const intakeProgress = document.getElementById('intakeProgress');
+  const intakeDone = document.getElementById('intakeDone');
+  const progressDetail = document.getElementById('progressDetail');
+  const diagnosticStatus = document.getElementById('diagnosticStatus');
+
+  submitBtn.disabled = true;
+  diagnosticStatus.textContent = 'Compressing walkaround profiles...';
+  intakeForm.style.display = 'none';
+  intakeProgress.style.display = 'block';
+
+  try {
+    progressDetail.textContent = 'Optimizing Left Side profile...';
+    const leftCompressed = await compressImageFile(slotFiles.left);
+    
+    progressDetail.textContent = 'Optimizing Right Side profile...';
+    const rightCompressed = await compressImageFile(slotFiles.right);
+
+    const wrapTierVal = document.getElementById('wrapTier').value;
+    const selectedFinishRadio = document.querySelector('input[name="finish"]:checked');
+    const finishSpecVal = wrapTierVal === 'ppf' ? 'Optical Clear PPF' : (selectedFinishRadio ? selectedFinishRadio.value : 'White Aluminum');
+
+    const payload = {
+      action: 'SUBMIT_INTAKE',
+      customerName: document.getElementById('custName').value.trim(),
+      customerEmail: document.getElementById('custEmail').value.trim(),
+      customerPhone: document.getElementById('custPhone').value.trim(),
+      rideInfo: document.getElementById('rideInfo').value.trim(),
+      wrapTier: wrapTierVal,
+      finishSpec: finishSpecVal,
+      notes: document.getElementById('custNotes').value.trim(),
+      photos: [leftCompressed, rightCompressed]
+    };
+
+    progressDetail.textContent = 'Logging dossier to Master Operations Database...';
+
+    let success = false;
+    let returnedJobId = null;
+
+    try {
+      const response = await fetch(APPS_SCRIPT_WEB_APP_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      });
+      if (response.ok) {
+        const json = await response.json();
+        if (json.status === 'SUCCESS') {
+          success = true;
+          returnedJobId = json.jobId;
+        }
+      }
+    } catch (corsTrapErr) {
+      console.warn('Redirect handled via fallback:', corsTrapErr);
+      await fetch(APPS_SCRIPT_WEB_APP_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      });
+      success = true;
+    }
+
+    if (success) {
+      intakeProgress.style.display = 'none';
+      intakeDone.style.display = 'block';
+      if (returnedJobId) {
+        document.getElementById('intakeJobMsg').innerHTML = 
+          `Hardware Dossier <strong>${returnedJobId}</strong> has been logged to Master Ops.<br><br>` +
+          `Our technicians will inspect your walkaround photos. Once approved, you will receive an email containing your ` +
+          `<strong>50% deposit link and pre-filled Custody Waiver</strong> to lock your Riverwalk drop-off window.`;
+      }
+    } else {
+      throw new Error('Server rejected submission payload.');
+    }
+
+  } catch (err) {
+    console.error('Submission pipeline error:', err);
+    alert('Submission recorded or network delay encountered. Check your email for confirmation.');
+    intakeProgress.style.display = 'none';
+    intakeForm.style.display = 'flex';
+    submitBtn.disabled = false;
+    diagnosticStatus.textContent = 'Notice: Check connection if this repeats.';
+  }
+}
 </script>
 
-
+<!-- Ambient 3D Interactive Canvas Graphics Engine -->
 <script>
 (function(){
-  var F=[
+  var F = [
     {id:'c1',m:'assets/bike-03.png',s:[['#ba1628','#3a7d18','#173807'],['#1e5b84','#c45500','#542000'],['#d4af37','#1e4db8','#0b1f52']]},
     {id:'c2',m:'assets/bike-02.png',s:[['#26a99a','#b8145d','#520527'],['#4a563e','#c79e00','#574400'],['#b85c37','#008fa3','#003c45']]},
     {id:'c3',m:'assets/bike-01.png',s:[['#3d4144','#c4ab00','#4d4300'],['#007799','#bd244b','#4f0d1e'],['#912224','#0099a8','#003d42']]},
@@ -166,40 +968,39 @@ u();
     {id:'c7',m:'assets/scooter-01.png',s:[['#007799','#c45500','#522100'],['#e2ba1b','#1644ad','#071d54'],['#3d4144','#b8284e','#4a0d1d']]},
     {id:'c8',m:'assets/scooter-03.png',s:[['#912224','#3a7d18','#173807'],['#4c2c69','#c4aa18','#4f4405'],['#4a563e','#008fa3','#003c45']]}
   ];
-  function h2r(h){var n=parseInt(h.replace('#',''),16);return[(n>>16)&255,(n>>8)&255,n&255];}
+  function h2r(h){ var n = parseInt(h.replace('#',''), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; }
   F.forEach(function(f){
-    var cd=document.getElementById(f.id+'Card'),cv=document.getElementById(f.id+'Canvas');
-    if(!cd||!cv)return;
-    var cx=cv.getContext('2d'),im=new Image(),cur=0;
+    var cd = document.getElementById(f.id + 'Card'), cv = document.getElementById(f.id + 'Canvas');
+    if(!cd || !cv) return;
+    var cx = cv.getContext('2d'), im = new Image(), cur = 0;
     function p(i){
-      var sw=f.s[i];
-      cd.style.background='radial-gradient(circle at center, '+sw[1]+' 0%, '+sw[2]+' 100%)';
-      cx.clearRect(0,0,240,240);cx.drawImage(im,0,0,240,240);
-      try{
-        var dt=cx.getImageData(0,0,240,240),d=dt.data,rgb=h2r(sw[0]),tR=rgb[0],tG=rgb[1],tB=rgb[2];
-        for(var j=0;j<d.length;j+=4){
-          var r=d[j],g=d[j+1],b=d[j+2],a=d[j+3];
-          if(a>30&&b>100&&(b/(r||1))>1.2&&(b/(g||1))>1.1){
-            var lum=(r/3.333+g/1.695+b/9.091)/255,sc=(lum+0.22)/(1/1.45);
-            d[j]=Math.min(255,Math.round(tR/(1/sc)));
-            d[j+1]=Math.min(255,Math.round(tG/(1/sc)));
-            d[j+2]=Math.min(255,Math.round(tB/(1/sc)));
-          }else if(a>20){
-            d[j]=Math.min(255,Math.round(r/0.82+12));
-            d[j+1]=Math.min(255,Math.round(g/0.82+12));
-            d[j+2]=Math.min(255,Math.round(b/0.82+12));
+      var sw = f.s[i];
+      cd.style.background = 'radial-gradient(circle at center, ' + sw[1] + ' 0%, ' + sw[2] + ' 100%)';
+      cx.clearRect(0, 0, 240, 240); cx.drawImage(im, 0, 0, 240, 240);
+      try {
+        var dt = cx.getImageData(0, 0, 240, 240), d = dt.data, rgb = h2r(sw[0]), tR = rgb[0], tG = rgb[1], tB = rgb[2];
+        for(var j = 0; j < d.length; j += 4){
+          var r = d[j], g = d[j+1], b = d[j+2], a = d[j+3];
+          if(a > 30 && b > 100 && (b / (r || 1)) > 1.2 && (b / (g || 1)) > 1.1){
+            var lum = (r / 3.333 + g / 1.695 + b / 9.091) / 255, sc = (lum + 0.22) / (1 / 1.45);
+            d[j] = Math.min(255, Math.round(tR / (1 / sc)));
+            d[j+1] = Math.min(255, Math.round(tG / (1 / sc)));
+            d[j+2] = Math.min(255, Math.round(tB / (1 / sc)));
+          } else if(a > 20){
+            d[j] = Math.min(255, Math.round(r / 0.82 + 12));
+            d[j+1] = Math.min(255, Math.round(g / 0.82 + 12));
+            d[j+2] = Math.min(255, Math.round(b / 0.82 + 12));
           }
         }
-        cx.putImageData(dt,0,0);
-      }catch(e){console.warn(e);}
+        cx.putImageData(dt, 0, 0);
+      } catch(e){ console.warn(e); }
     }
-    im.onload=function(){p(0);};
-    im.onerror=function(){if(im.src.indexOf('assets/')!==-1)im.src=f.m.replace('assets/','');};
-    im.src=f.m;
-    cd.onclick=function(){cur=(cur+1)%f.s.length;p(cur);};
+    im.onload = function(){ p(0); };
+    im.onerror = function(){ if(im.src.indexOf('assets/') !== -1) im.src = f.m.replace('assets/',''); };
+    im.src = f.m;
+    cd.onclick = function(){ cur = (cur + 1) % f.s.length; p(cur); };
   });
 })();
 </script>
-
 </body>
 </html>

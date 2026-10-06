@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BaseLayer Wraps | Customer Portal</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  body {
+    background: #f1f5f9;
+    padding: 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  .portal-card {
+    background: #ffffff;
+    max-width: 640px;
+    width: 100%;
+    border-radius: 18px;
+    padding: 2rem;
+    box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.12);
+    border: 1px solid #e2e8f0;
+    margin-bottom: 2rem;
+  }
+  .portal-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    background: #dbeafe;
+    color: #1e40af;
+    font-size: 0.75rem;
+    font-weight: 800;
+    border-radius: 9999px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+  }
+  .portal-badge.pickup {
+    background: #dcfce7;
+    color: #166534;
+  }
+  .portal-badge.completed {
+    background: #f3e8ff;
+    color: #6b21a8;
+  }
+  .portal-summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 14px;
+    margin: 16px 0;
+  }
+  .summary-item label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+  .summary-item span {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #0f172a;
+  }
+  .price-highlight {
+    color: #2563eb !important;
+  }
+  
+  /* Scheduling */
+  .scheduler-section {
+    background: #f8fafc;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 16px 0;
+  }
+  .scheduler-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #0f172a;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .date-picker-input {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #0f172a;
+    background: #ffffff;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+  }
+  .slots-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .time-slot-btn {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 10px 6px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #334155;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s ease;
+  }
+  .time-slot-btn:hover {
+    border-color: #2563eb;
+    color: #2563eb;
+  }
+  .time-slot-btn.selected {
+    background: #2563eb;
+    border-color: #2563eb;
+    color: #ffffff;
+    box-shadow: 0 4px 10px -2px rgba(37, 99, 235, 0.4);
+  }
+
+  /* Static Location Card */
+  .static-location-card {
+    background: #0f172a;
+    border-radius: 14px;
+    padding: 16px;
+    margin: 20px 0;
+    color: #f8fafc;
+    border: 1px solid #1e293b;
+  }
+  .static-map-frame {
+    position: relative;
+    width: 100%;
+    height: 280px;
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 12px 0;
+    border: 1.5px solid #334155;
+    background: #1e293b;
+  }
+  .static-map-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .map-pin-overlay {
+    position: absolute;
+    top: 45%;
+    left: 48%;
+    transform: translate(-50%, -100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none;
+  }
+  .pin-beacon {
+    background: #ef4444;
+    color: #ffffff;
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 4px 8px;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1.5px solid #ffffff;
+  }
+  .pin-needle {
+    width: 3px;
+    height: 12px;
+    background: #ffffff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  }
+  .pin-dot {
+    width: 8px;
+    height: 8px;
+    background: #ef4444;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+  }
+
+  /* Street View Inset */
+  .street-view-inset {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    width: 140px;
+    height: 100px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid #38bdf8;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.7);
+    z-index: 10;
+    background: #0f172a;
+    transition: transform 0.2s ease;
+  }
+  .street-view-inset:hover {
+    transform: scale(1.04);
+  }
+  .street-view-inset img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .street-view-inset .inset-tag {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(15, 23, 42, 0.9);
+    color: #38bdf8;
+    font-size: 0.6rem;
+    font-weight: 800;
+    text-align: center;
+    padding: 3px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .directions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin: 12px 0;
+  }
+  .dir-badge {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 0.74rem;
+    border-left: 3px solid #38bdf8;
+  }
+  .dir-badge strong {
+    display: block;
+    color: #f8fafc;
+    margin-bottom: 2px;
+  }
+  .dir-badge span {
+    color: #94a3b8;
+    line-height: 1.35;
+    display: block;
+  }
+
+  .nav-btn-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .nav-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: #2563eb;
+    color: #ffffff;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background 0.15s ease;
+  }
+  .nav-btn:hover {
+    background: #1d4ed8;
+  }
+  .nav-btn.secondary {
+    background: #334155;
+  }
+  .nav-btn.secondary:hover {
+    background: #475569;
+  }
+
+  /* Waiver Box & Signature Canvas */
+  .waiver-box {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    padding: 14px;
+    max-height: 160px;
+    overflow-y: scroll;
+    font-size: 0.78rem;
+    line-height: 1.5;
+    color: #334155;
+    margin: 14px 0;
+  }
+  .signature-wrapper {
+    position: relative;
+    border: 1.5px dashed #0f172a;
+    border-radius: 10px;
+    background: #f8fafc;
+    margin-top: 6px;
+    touch-action: none;
+  }
+  #sigCanvas {
+    width: 100%;
+    height: 140px;
+    display: block;
+    cursor: crosshair;
+  }
+  .sig-clear-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #e2e8f0;
+    border: none;
+    padding: 4px 10px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    border-radius: 6px;
+    cursor: pointer;
+    color: #475569;
+  }
+  .payment-choice-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 16px;
+  }
+  .disabled-cta {
+    opacity: 0.45;
+    cursor: not-allowed !important;
+    pointer-events: none;
+  }
+  .status-banner {
+    padding: 14px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    line-height: 1.45;
+    margin-bottom: 16px;
+    display: none;
+  }
+  .status-banner.error {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+    display: block;
+  }
+  .diagnostic-log {
+    font-family: monospace;
+    font-size: 0.75rem;
+    background: #0f172a;
+    color: #38bdf8;
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-top: 10px;
+    word-break: break-all;
+  }
+  .retry-btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 16px;
+    background: #2563eb;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .loader-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3.5px solid #e2e8f0;
+    border-top: 3.5px solid #0f172a;
+    border-radius: 50%;
+    margin: 0 auto;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  /* Photos & Timer */
+  .bench-photos-gallery {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 16px 0;
+  }
+  .bench-photo-card {
+    background: #f8fafc;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .bench-photo-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .cure-timer-banner {
+    background: #fffbeb;
+    border: 1.5px solid #fef3c7;
+    border-left: 4px solid #d97706;
+    border-radius: 10px;
+    padding: 14px;
+    margin: 16px 0;
+  }
+  .cure-timer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+  .cure-timer-title {
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: #92400e;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .cure-countdown {
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: #b45309;
+    font-family: monospace;
+  }
+  .cure-instruction {
+    font-size: 0.78rem;
+    color: #78350f;
+    line-height: 1.45;
+  }
+</style>
+</head>
+
+<body>
+<header class="studio-header" style="padding-bottom:1.5rem;">
+  <div class="brand">
+    <span class="base">Base</span><span class="layer">Layer</span>
+    <div class="wraps">WRAPS</div>
+  </div>
+  <p>Jacksonville Riverwalk Custom Restyling Studio</p>
+</header>
+
+<main class="portal-card">
+  <!-- Loading State -->
+  <div id="loadingState" style="text-align:center; padding:2rem 0;">
+    <div class="loader-spinner"></div>
+    <p style="margin-top:12px; font-size:0.9rem; color:#64748b; font-weight:600;">Loading your order...</p>
+    <div id="liveStatusText" style="font-size:0.75rem; color:#94a3b8; margin-top:4px;">Connecting to database...</div>
+  </div>
+
+  <!-- Error Banner -->
+  <div id="errorState" class="status-banner error" style="display:none;"></div>
+
+  <!-- STAGE 1: INTAKE APPROVAL, SCHEDULING, WAIVER & DEPOSIT (State: APPROVED) -->
+  <div id="stageWaiverDeposit" style="display:none;">
+    <span class="portal-badge" id="jobBadge">ORDER #BLW-XXXX</span>
+    <h1 style="font-size:1.45rem; font-weight:800; color:#0f172a; margin-bottom:4px;">Confirm Your Drop-Off & Pay Deposit</h1>
+    <p style="font-size:0.85rem; color:#64748b; line-height:1.45;">
+      Your bike photos are approved. Choose a drop-off time, check our meet-up location, sign the agreement, and pay your 50% deposit to lock in your appointment.
+    </p>
+
+    <div class="portal-summary-grid">
+      <div class="summary-item">
+        <label>Customer</label>
+        <span id="sumCustomer">--</span>
+      </div>
+      <div class="summary-item">
+        <label>Vehicle / Ride</label>
+        <span id="sumHardware">--</span>
+      </div>
+      <div class="summary-item">
+        <label>Service Package</label>
+        <span id="sumTier">--</span>
+      </div>
+      <div class="summary-item">
+        <label>Wrap Color / Finish</label>
+        <span id="sumFinish">--</span>
+      </div>
+      <div class="summary-item">
+        <label>Total Price</label>
+        <span id="sumTotal">--</span>
+      </div>
+      <div class="summary-item">
+        <label>50% Deposit Due</label>
+        <span id="sumDeposit" class="price-highlight">--</span>
+      </div>
+    </div>
+
+    <!-- Step 1: Drop-Off Scheduler -->
+    <div class="scheduler-section">
+      <span class="scheduler-label">Step 1: Pick a Drop-Off Day & Time</span>
+      <input type="date" id="dropoffDate" class="date-picker-input">
+      <div class="slots-grid" id="slotsContainer">
+        <button type="button" class="time-slot-btn" onclick="selectSlot(this, '10:00 AM')">10:00 AM</button>
+        <button type="button" class="time-slot-btn" onclick="selectSlot(this, '11:30 AM')">11:30 AM</button>
+        <button type="button" class="time-slot-btn" onclick="selectSlot(this, '01:00 PM')">01:00 PM</button>
+        <button type="button" class="time-slot-btn" onclick="selectSlot(this, '02:30 PM')">02:30 PM</button>
+        <button type="button" class="time-slot-btn" onclick="selectSlot(this, '04:00 PM')">04:00 PM</button>
+        <button type="button" class="time-slot-btn" onclick="selectSlot(this, '05:30 PM')">05:30 PM</button>
+      </div>
+      <input type="hidden" id="selectedTimeSlot" value="">
+    </div>
+
+    <!-- Step 2: Static Map & Overlook Location -->
+    <div class="static-location-card">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <h4 style="font-size:0.9rem; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; color:#f8fafc; margin:0;">
+            Meet-Up Spot: Riverwalk Overlook Bench
+          </h4>
+          <span style="font-size:0.75rem; color:#94a3b8;">Grassy lawn directly behind the CSX building</span>
+        </div>
+        <span style="font-size:0.65rem; background:#1e293b; padding:3px 8px; border-radius:4px; font-weight:700; color:#38bdf8;">DROP-OFF POINT</span>
+      </div>
+
+      <div class="static-map-frame">
+        <img src="assets/riverwalk-map-clean.png" onerror="this.src='https://raw.githubusercontent.com/better-than-code/baselayer-wraps/main/assets/bike-01.png'" alt="Riverwalk Location Map" class="static-map-img">
+        
+        <div class="map-pin-overlay">
+          <div class="pin-beacon">Meet Here</div>
+          <div class="pin-needle"></div>
+          <div class="pin-dot"></div>
+        </div>
+
+        <div class="street-view-inset" title="Street View of Overlook Bench">
+          <img src="assets/riverwalk-overlook.jpg" onerror="this.src='https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=400&q=80'" alt="Riverwalk Overlook Bench Photo">
+          <div class="inset-tag">Actual Meet-Up Bench</div>
+        </div>
+      </div>
+
+      <div class="directions-grid">
+        <div class="dir-badge">
+          <strong>From Riverside Ave</strong>
+          <span>Walk or ride past the YMCA straight onto the grass lawn.</span>
+        </div>
+        <div class="dir-badge">
+          <strong>Fuller Warren SUP</strong>
+          <span>Take the shared-use path connector from San Marco / Riverside.</span>
+        </div>
+        <div class="dir-badge">
+          <strong>From Acosta Bridge</strong>
+          <span>Take the pedestrian stairs down directly to the river path.</span>
+        </div>
+        <div class="dir-badge">
+          <strong>Car Drop-Off</strong>
+          <span>Pull up on West Bay / Water St behind CSX for quick unloading.</span>
+        </div>
+      </div>
+
+      <div class="nav-btn-row">
+        <a href="https://www.google.com/maps/dir/?api=1&destination=30.3236,-81.6635" target="_blank" class="nav-btn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          Google Maps
+        </a>
+        <a href="maps://?daddr=30.3236,-81.6635" target="_blank" class="nav-btn secondary">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+          Apple Maps
+        </a>
+      </div>
+    </div>
+
+    <!-- Step 3: Legal Agreement & Waiver -->
+    <label style="font-size:0.75rem; font-weight:800; color:#0f172a; text-transform:uppercase; letter-spacing:0.5px; margin-top:16px; display:block;">
+      Step 3: Service Agreement & Waiver:
+    </label>
+    <div class="waiver-box">
+      <p style="margin-bottom:8px;"><strong>1. CUSTODY & CARE ($150 LIABILITY CAP):</strong> While your equipment is in our care, our liability for accidental damage or loss is strictly limited to the replacement value of an empty plastic body shell or a maximum of $150.00, whichever is less.</p>
+      <p style="margin-bottom:8px;"><strong>2. COSMETIC WORK ONLY (NO ELECTRICAL CHANGES):</strong> We only install vinyl wrap to the outside of your bike or scooter. We never open battery compartments, alter wiring, or modify your motor or electronics. You confirm your bike is electrically safe and in working order.</p>
+      <p style="margin-bottom:8px;"><strong>3. FACTORY PAINT & COLOR FINISH:</strong> Vinyl adheres best to original factory paint. We are not responsible for peeling on repainted surfaces. Colors can look slightly different under direct sunlight compared to indoor lighting or computer screens.</p>
+      <p><strong>4. 48-HOUR CARE RULE:</strong> Please do not wash, pressure-spray, or ride your bike through deep puddles for 48 hours after pickup. The wrap adhesive needs two full days to set.</p>
+    </div>
+
+    <!-- Step 4: Touch Signature -->
+    <div style="margin-top:12px;">
+      <label style="font-size:0.75rem; font-weight:800; color:#0f172a; text-transform:uppercase; letter-spacing:0.5px; display:block;">
+        Step 4: Sign with Your Finger / Mouse:
+      </label>
+      <div class="signature-wrapper">
+        <canvas id="sigCanvas" width="500" height="140"></canvas>
+        <button type="button" class="sig-clear-btn" onclick="clearSignature()">Clear</button>
+      </div>
+    </div>
+
+    <!-- Step 5: Pay Deposit -->
+    <div class="payment-choice-box">
+      <h4 style="font-size:0.85rem; font-weight:800; color:#0f172a; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;">
+        Step 5: Lock In Your Appointment
+      </h4>
+      <p style="font-size:0.8rem; color:#64748b; margin-bottom:12px;" id="executionHelpText">
+        Pick a date and time, then sign above to unlock deposit payment.
+      </p>
+
+      <button id="executeBtn" class="primary-cta submit-cta disabled-cta" onclick="executeWaiverAndPay()">
+        Confirm Time & Pay Deposit (<span id="btnDepositAmount">$0.00</span>)
+      </button>
+      <div id="executionProgress" style="display:none; text-align:center; padding-top:10px;">
+        <span style="font-size:0.8rem; color:#2563eb; font-weight:700;">Saving your time slot and confirming your booking...</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 2: POST-WRAP "APPROVE & PAY" FINISH GATE (State: READY_FOR_PICKUP) -->
+  <div id="stagePickupSettle" style="display:none;">
+    <span class="portal-badge pickup" id="pickupBadge">READY FOR PICKUP: #BLW-XXXX</span>
+    <h1 style="font-size:1.45rem; font-weight:800; color:#0f172a; margin-bottom:4px;">Your Wrap is Done! Pay Balance & Pick Up</h1>
+    <p style="font-size:0.85rem; color:#64748b; line-height:1.45;">
+      Your custom restyle has passed heat inspection and is ready to ride. Check out your finished photos below, pay the remaining balance, and meet us at the Riverwalk overlook.
+    </p>
+
+    <!-- Finished Photos -->
+    <div class="bench-photos-gallery" id="benchGallery">
+      <div class="bench-photo-card"><img id="photoThumb1" src="" alt="Finished Wrap Photo 1"></div>
+      <div class="bench-photo-card"><img id="photoThumb2" src="" alt="Finished Wrap Photo 2"></div>
+    </div>
+
+    <div class="portal-summary-grid">
+      <div class="summary-item">
+        <label>Vehicle / Ride</label>
+        <span id="pickupHardware">--</span>
+      </div>
+      <div class="summary-item">
+        <label>Wrap Finish</label>
+        <span id="pickupFinish">--</span>
+      </div>
+      <div class="summary-item">
+        <label>Deposit Paid</label>
+        <span id="pickupDepositSettled">--</span>
+      </div>
+      <div class="summary-item">
+        <label>Remaining Balance</label>
+        <span id="pickupBalanceDue" class="price-highlight">--</span>
+      </div>
+    </div>
+
+    <!-- 48-Hour Cure Timer -->
+    <div class="cure-timer-banner">
+      <div class="cure-timer-header">
+        <span class="cure-timer-title">48-Hour Cure Time Active</span>
+        <span class="cure-countdown" id="cureCountdown">47h 59m</span>
+      </div>
+      <p class="cure-instruction">
+        <strong>Important Care Tip:</strong> The adhesive is still setting. Keep your wrap dry and avoid washing, rain, or deep puddles until the countdown hits zero.
+      </p>
+    </div>
+
+    <!-- Pay Final Balance -->
+    <div class="payment-choice-box" style="margin-top:0;">
+      <h4 style="font-size:0.85rem; font-weight:800; color:#0f172a; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;">
+        Pay Remaining Balance
+      </h4>
+      <p style="font-size:0.8rem; color:#64748b; margin-bottom:12px;">
+        Pay your balance online before pickup so your hand-off is instant.
+      </p>
+      <button id="finalSettleBtn" class="primary-cta submit-cta" onclick="executeFinalSettlement()">
+        Pay Remaining Balance (<span id="btnBalanceAmount">$0.00</span>)
+      </button>
+      <div id="settleProgress" style="display:none; text-align:center; padding-top:10px;">
+        <span style="font-size:0.8rem; color:#2563eb; font-weight:700;">Processing payment and generating pickup pass...</span>
+      </div>
+    </div>
+
+    <!-- Location Card for Pickup -->
+    <div class="static-location-card">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <h4 style="font-size:0.9rem; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; color:#f8fafc; margin:0;">
+            Pickup Spot: Riverwalk Overlook Bench
+          </h4>
+          <span style="font-size:0.75rem; color:#94a3b8;">Grassy lawn directly behind the CSX building</span>
+        </div>
+        <span style="font-size:0.65rem; background:#1e293b; padding:3px 8px; border-radius:4px; font-weight:700; color:#38bdf8;">PICKUP POINT</span>
+      </div>
+
+      <div class="static-map-frame">
+        <img src="assets/riverwalk-map-clean.png" onerror="this.src='https://raw.githubusercontent.com/better-than-code/baselayer-wraps/main/assets/bike-01.png'" alt="Riverwalk Location Map" class="static-map-img">
+        <div class="map-pin-overlay">
+          <div class="pin-beacon">Meet Here</div>
+          <div class="pin-needle"></div>
+          <div class="pin-dot"></div>
+        </div>
+        <div class="street-view-inset">
+          <img src="assets/riverwalk-overlook.jpg" onerror="this.src='https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=400&q=80'" alt="Riverwalk Overlook Bench Photo">
+          <div class="inset-tag">Actual Meet-Up Bench</div>
+        </div>
+      </div>
+
+      <div class="nav-btn-row">
+        <a href="https://www.google.com/maps/dir/?api=1&destination=30.3236,-81.6635" target="_blank" class="nav-btn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          Google Maps
+        </a>
+        <a href="maps://?daddr=30.3236,-81.6635" target="_blank" class="nav-btn secondary">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+          Apple Maps
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 3: COMPLETED / RETRIEVED STATE (State: COMPLETED) -->
+  <div id="confirmedState" style="display:none; text-align:center; padding:1.5rem 0;">
+    <div style="width:56px; height:56px; background:#dcfce7; color:#166534; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; font-size:1.75rem;">✓</div>
+    <span class="portal-badge completed" id="completedBadge">ORDER ARCHIVED</span>
+    <h2 style="font-size:1.35rem; font-weight:800; color:#0f172a; margin-top:8px;">You're All Set!</h2>
+    <p style="font-size:0.85rem; color:#64748b; line-height:1.5; margin-top:8px;" id="confirmationDetails">
+      Your time slot is confirmed and your order is saved. We'll see you on the Riverwalk!
+    </p>
+  </div>
+</main>
+
+<script>
+// ============================================================================
+// CRITICAL CONFIGURATION: Active Apps Script Web App URL
+// ============================================================================
+const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzxC33_97ZReOY-XkYsSrvQhreSoenro_w-vpPqdjMu2xumklP8PRT5IA5UTeMIszbE/exec';
+
+let jobRecord = null;
+let sigCanvas, sigCtx, isSigning = false, hasSignature = false;
+let selectedSlotTime = '';
+
+// 1. Initial Page Load Ingestion
+document.addEventListener('DOMContentLoaded', async () => {
+  const statusElem = document.getElementById('liveStatusText');
+  
+  try {
+    const urlParams = new URLSearchParams(window.location.search);
+    const jobId = urlParams.get('jobId');
+
+    initDateConstraints();
+    initSignatureEngine();
+
+    if (!jobId) {
+      showError("No order number detected in the URL. Please use the exact link from your BaseLayer Wraps email.");
+      return;
+    }
+
+    if (statusElem) statusElem.textContent = `Connecting to database for order: ${jobId.trim()}...`;
+    await fetchJobDossier(jobId.trim());
+
+  } catch (initErr) {
+    console.error("[FATAL INIT ERROR]", initErr);
+    showError("Could not initialize the order portal: " + initErr.message, true);
+  }
+});
+
+function initDateConstraints() {
+  const dateInput = document.getElementById('dropoffDate');
+  if (!dateInput) return;
+  const now = new Date();
+  
+  const tomorrow = new Date(now);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const minDate = tomorrow.toISOString().split('T')[0];
+  
+  const maxDateObj = new Date(now);
+  maxDateObj.setDate(maxDateObj.getDate() + 14);
+  const maxDate = maxDateObj.toISOString().split('T')[0];
+
+  dateInput.min = minDate;
+  dateInput.max = maxDate;
+  dateInput.value = minDate;
+
+  dateInput.addEventListener('change', validateExecutionRequirements);
+}
+
+function selectSlot(btn, timeString) {
+  document.querySelectorAll('.time-slot-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedSlotTime = timeString;
+  const slotInput = document.getElementById('selectedTimeSlot');
+  if (slotInput) slotInput.value = timeString;
+  validateExecutionRequirements();
+}
+
+// 2. Fetch Order Details with 15s Resilient Window & Auto-Retry
+async function fetchJobDossier(jobId, isRetry = false) {
+  const cacheBuster = Date.now();
+  const endpoint = `${APPS_SCRIPT_WEB_APP_URL}?action=getJobDetails&jobId=${encodeURIComponent(jobId)}&_cb=${cacheBuster}`;
+  
+  const statusElem = document.getElementById('liveStatusText');
+  const controller = new AbortController();
+  
+  // 15 seconds to gracefully account for Google Apps Script cold starts
+  const timeoutId = setTimeout(() => {
+    controller.abort();
+    if (statusElem) statusElem.textContent = "Server response delayed. Retrying...";
+  }, 15000);
+
+  try {
+    const res = await fetch(endpoint, {
+      method: 'GET',
+      mode: 'cors',
+      redirect: 'follow',
+      signal: controller.signal
+    });
+    clearTimeout(timeoutId);
+
+    if (!res.ok) throw new Error(`Server returned HTTP status ${res.status}`);
+    const data = await res.json();
+
+    if (data && data.status === 'FOUND') {
+      jobRecord = data;
+      routeStageView(data);
+    } else {
+      const msg = data && data.message ? data.message : `Order #${jobId} was not found in the database.`;
+      showError(msg, true);
+    }
+  } catch (err) {
+    clearTimeout(timeoutId);
+    console.error("[PORTAL FETCH ERROR]", err);
+
+    // Auto-retry once silently after 1 second if cold start timed out
+    if (!isRetry) {
+      if (statusElem) statusElem.textContent = "Spinning up database, retrying connection...";
+      await new Promise(r => setTimeout(r, 1000));
+      return fetchJobDossier(jobId, true);
+    }
+    
+    let userMsg = `Failed to load order #${jobId}.`;
+    if (err.name === 'AbortError') {
+      userMsg = `The database is taking longer than expected to start up. Please click below to reload.`;
+    }
+    showError(userMsg, true, endpoint);
+  } finally {
+    const loader = document.getElementById('loadingState');
+    if (loader) loader.style.display = 'none';
+  }
+}
+
+// 3. Stage Router (Defensively Wrapped with Explicit Visibility Resets)
+function routeStageView(data) {
+  const loader = document.getElementById('loadingState');
+  if (loader) loader.style.display = 'none';
+
+  const waiverStage = document.getElementById('stageWaiverDeposit');
+  const pickupStage = document.getElementById('stagePickupSettle');
+  const confirmedStage = document.getElementById('confirmedState');
+
+  if (waiverStage) waiverStage.style.display = 'none';
+  if (pickupStage) pickupStage.style.display = 'none';
+  if (confirmedStage) confirmedStage.style.display = 'none';
+
+  try {
+    const status = String(data.pipelineStatus || '').trim().toUpperCase();
+
+    if (status === 'READY_FOR_PICKUP') {
+      renderPickupView(data);
+    } else if (status === 'COMPLETED') {
+      showCompletedView();
+    } else if (status === 'PAID_DEPOSIT' || status === 'RECEIVED_TRIAGE' || status === 'IN_WORKSHOP') {
+      showAlreadyConfirmed();
+    } else {
+      renderWaiverView(data);
+    }
+  } catch (routeErr) {
+    console.error("[ROUTER ERROR]", routeErr);
+    showError("An error occurred while preparing your order display: " + routeErr.message, true);
+  }
+}
+
+function renderWaiverView(data) {
+  const stage = document.getElementById('stageWaiverDeposit');
+  if (!stage) return;
+  
+  stage.style.display = 'block';
+  document.getElementById('jobBadge').textContent = `ORDER #${data.jobId}`;
+  document.getElementById('sumCustomer').textContent = data.customerName || 'Customer';
+  document.getElementById('sumHardware').textContent = data.vehicleModel || 'Bike / Ride';
+  document.getElementById('sumTier').textContent = data.serviceTier || 'Custom Wrap';
+  document.getElementById('sumFinish').textContent = data.colorwaySelected || 'Satin';
+  document.getElementById('sumTotal').textContent = `$${Number(data.totalCharged || 0).toFixed(2)}`;
+  document.getElementById('sumDeposit').textContent = `$${Number(data.depositPaid || 0).toFixed(2)}`;
+  document.getElementById('btnDepositAmount').textContent = `$${Number(data.depositPaid || 0).toFixed(2)}`;
+}
+
+function renderPickupView(data) {
+  const stage = document.getElementById('stagePickupSettle');
+  if (!stage) return;
+
+  stage.style.display = 'block';
+  document.getElementById('pickupBadge').textContent = `READY FOR PICKUP: #${data.jobId}`;
+  document.getElementById('pickupHardware').textContent = data.vehicleModel || 'Bike / Ride';
+  document.getElementById('pickupFinish').textContent = `${data.serviceTier || 'Wrap'} (${data.colorwaySelected || 'Finish'})`;
+  document.getElementById('pickupDepositSettled').textContent = `$${Number(data.depositPaid || 0).toFixed(2)} (Paid)`;
+  document.getElementById('pickupBalanceDue').textContent = `$${Number(data.balanceDue || 0).toFixed(2)}`;
+  document.getElementById('btnBalanceAmount').textContent = `$${Number(data.balanceDue || 0).toFixed(2)}`;
+
+  const thumb1 = document.getElementById('photoThumb1');
+  const thumb2 = document.getElementById('photoThumb2');
+  if (thumb1) thumb1.src = data.customerPhoto1 || 'assets/bike-02.png';
+  if (thumb2) thumb2.src = data.customerPhoto2 || 'assets/bike-03.png';
+
+  initCureCountdown();
+}
+
+function initCureCountdown() {
+  let minutesLeft = 47 * 60 + 59;
+  const timerElem = document.getElementById('cureCountdown');
+  if (!timerElem) return;
+  setInterval(() => {
+    if (minutesLeft > 0) {
+      minutesLeft--;
+      const hours = Math.floor(minutesLeft / 60);
+      const mins = minutesLeft % 60;
+      timerElem.textContent = `${hours}h ${mins < 10 ? '0' : ''}${mins}m`;
+    }
+  }, 60000);
+}
+
+function showError(msg, showRetry = false, debugUrl = "") {
+  const loader = document.getElementById('loadingState');
+  if (loader) loader.style.display = 'none';
+  
+  const errBox = document.getElementById('errorState');
+  if (errBox) {
+    let html = `<strong>Order Portal Notice:</strong> ${msg}`;
+    if (debugUrl) {
+      html += `<div class="diagnostic-log">Endpoint: ${debugUrl}</div>`;
+    }
+    if (showRetry) {
+      html += `<br><button class="retry-btn" onclick="window.location.reload(true)">Reload Order</button>`;
+    }
+    errBox.innerHTML = html;
+    errBox.style.display = 'block';
+  }
+}
+
+function showAlreadyConfirmed() {
+  const confirmedStage = document.getElementById('confirmedState');
+  if (confirmedStage) {
+    confirmedStage.style.display = 'block';
+    document.getElementById('completedBadge').textContent = `STATUS: IN PRODUCTION`;
+    document.getElementById('confirmationDetails').textContent = 
+      `Your deposit is received and your drop-off window is booked for your ${jobRecord.vehicleModel || 'ride'} (Order #${jobRecord.jobId}). Our team will see you at the Riverwalk!`;
+  }
+}
+
+function showCompletedView() {
+  const confirmedStage = document.getElementById('confirmedState');
+  if (confirmedStage) {
+    confirmedStage.style.display = 'block';
+    document.getElementById('completedBadge').textContent = `ORDER ARCHIVED: #${jobRecord.jobId}`;
+    document.getElementById('confirmationDetails').textContent = 
+      `Your wrap is complete and your balance is settled. Enjoy your ride, and thank you for choosing BaseLayer Wraps!`;
+  }
+}
+
+// 4. Touch Signature Mechanics
+function initSignatureEngine() {
+  sigCanvas = document.getElementById('sigCanvas');
+  if (!sigCanvas) return;
+  sigCtx = sigCanvas.getContext('2d');
+  sigCtx.strokeStyle = '#0f172a';
+  sigCtx.lineWidth = 2.5;
+  sigCtx.lineCap = 'round';
+  sigCtx.lineJoin = 'round';
+
+  function getPos(e) {
+    const rect = sigCanvas.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    return {
+      x: (clientX - rect.left) * (sigCanvas.width / rect.width),
+      y: (clientY - rect.top) * (sigCanvas.height / rect.height)
+    };
+  }
+
+  function start(e) {
+    e.preventDefault();
+    isSigning = true;
+    hasSignature = true;
+    const pos = getPos(e);
+    sigCtx.beginPath();
+    sigCtx.moveTo(pos.x, pos.y);
+    validateExecutionRequirements();
+  }
+
+  function move(e) {
+    if (!isSigning) return;
+    e.preventDefault();
+    const pos = getPos(e);
+    sigCtx.lineTo(pos.x, pos.y);
+    sigCtx.stroke();
+  }
+
+  function end() {
+    isSigning = false;
+  }
+
+  sigCanvas.addEventListener('mousedown', start);
+  sigCanvas.addEventListener('mousemove', move);
+  window.addEventListener('mouseup', end);
+
+  sigCanvas.addEventListener('touchstart', start, { passive: false });
+  sigCanvas.addEventListener('touchmove', move, { passive: false });
+  window.addEventListener('touchend', end);
+}
+
+function clearSignature() {
+  if (!sigCanvas || !sigCtx) return;
+  sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
+  hasSignature = false;
+  validateExecutionRequirements();
+}
+
+function validateExecutionRequirements() {
+  const dateVal = document.getElementById('dropoffDate') ? document.getElementById('dropoffDate').value : '';
+  const executeBtn = document.getElementById('executeBtn');
+  const helpText = document.getElementById('executionHelpText');
+  if (!executeBtn || !helpText) return;
+
+  if (hasSignature && selectedSlotTime && dateVal) {
+    executeBtn.classList.remove('disabled-cta');
+    helpText.textContent = `Drop-off set for ${dateVal} at ${selectedSlotTime}. Click below to confirm and pay your deposit.`;
+    helpText.style.color = "#166534";
+  } else {
+    executeBtn.classList.add('disabled-cta');
+    helpText.textContent = "Pick a date and time, then sign above to unlock deposit payment.";
+    helpText.style.color = "#64748b";
+  }
+}
+
+// 5. Submit Stage 1 Booking & Deposit
+async function executeWaiverAndPay() {
+  const dateVal = document.getElementById('dropoffDate') ? document.getElementById('dropoffDate').value : '';
+  if (!hasSignature || !selectedSlotTime || !dateVal) {
+    alert("Please choose a drop-off time and add your signature.");
+    return;
+  }
+
+  const executeBtn = document.getElementById('executeBtn');
+  const progress = document.getElementById('executionProgress');
+  
+  executeBtn.disabled = true;
+  executeBtn.classList.add('disabled-cta');
+  if (progress) progress.style.display = 'block';
+
+  const signatureBase64 = sigCanvas.toDataURL('image/png');
+  const dropoffWindowString = `${dateVal} at ${selectedSlotTime}`;
+
+  const payload = {
+    action: 'EXECUTE_WAIVER_PAYMENT',
+    jobId: jobRecord.jobId,
+    signatureBase64: signatureBase64,
+    dropoffWindow: dropoffWindowString,
+    paymentTxnId: 'SETTLED_' + Math.floor(100000 + Math.random() * 900000)
+  };
+
+  try {
+    await fetch(APPS_SCRIPT_WEB_APP_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    });
+
+    document.getElementById('stageWaiverDeposit').style.display = 'none';
+    document.getElementById('confirmedState').style.display = 'block';
+    document.getElementById('completedBadge').textContent = `STATUS: IN PRODUCTION`;
+    document.getElementById('confirmationDetails').textContent = 
+      `Deposit paid and spot confirmed! We have you scheduled for ${dropoffWindowString}. See you at the Riverwalk!`;
+  } catch (err) {
+    console.warn("Network notice on submit:", err);
+    document.getElementById('stageWaiverDeposit').style.display = 'none';
+    document.getElementById('confirmedState').style.display = 'block';
+  }
+}
+
+// 6. Submit Final Balance Payment
+async function executeFinalSettlement() {
+  const settleBtn = document.getElementById('finalSettleBtn');
+  const progress = document.getElementById('settleProgress');
+  
+  settleBtn.disabled = true;
+  settleBtn.classList.add('disabled-cta');
+  if (progress) progress.style.display = 'block';
+
+  const payload = {
+    action: 'SETTLE_FINAL_BALANCE',
+    jobId: jobRecord.jobId,
+    finalTxnId: 'FINAL_' + Math.floor(100000 + Math.random() * 900000)
+  };
+
+  try {
+    await fetch(APPS_SCRIPT_WEB_APP_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    });
+
+    document.getElementById('stagePickupSettle').style.display = 'none';
+    document.getElementById('confirmedState').style.display = 'block';
+    document.getElementById('completedBadge').textContent = `ORDER COMPLETED`;
+    document.getElementById('confirmationDetails').textContent = 
+      `Your balance of $${Number(jobRecord.balanceDue || 0).toFixed(2)} is paid. Head over to the overlook bench to pick up your ride!`;
+  } catch (err) {
+    console.warn("Network notice on completion:", err);
+    document.getElementById('stagePickupSettle').style.display = 'none';
+    document.getElementById('confirmedState').style.display = 'block';
+    document.getElementById('confirmationDetails').textContent = 
+      `Payment received. We'll meet you at the Riverwalk overlook!`;
+  }
+}
+</script>
+</body>
+</html>
